@@ -2,16 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+*{
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before{
+  font-size: 30px;
+  font-weight: 400;
+  color: #a09e9e;
+  font-style: normal;
+}
+
+.ql-container {
+  min-height: 400px;
 }

@@ -4,11 +4,11 @@ import Pages from "./pages";
 
 function App() {
   return (
-    <>
+    <div className="w-full">
       <Router>
         <Pages />
       </Router>
-    </>
+    </div>
   );
 }
 
