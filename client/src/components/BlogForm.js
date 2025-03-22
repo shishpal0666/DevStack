@@ -16,7 +16,7 @@ const modules = {
       { indent: '-1' },
       { indent: '+1' },
     ],
-    ['link', {'image': ['small','large']},'video','formula','code-block'],
+    ['link', 'image', 'video', 'formula', 'code-block'],
     ['clean'],
   ],
   clipboard: {
@@ -42,9 +42,9 @@ const BlogForm = () => {
 
   return (
     <>
-      <div className='w-full m-16'>
+      <div className='w-[calc(100%_-_8rem)] m-16'>
         <div className='flex flex-col items-start justify-center gap-8'>
-          <section className='w-[90%] flex flex-row items-center justify-between'>
+          <section className='w-[100%] flex flex-row items-center justify-between'>
             <input 
             type="text"
             value={title} 
@@ -56,7 +56,7 @@ const BlogForm = () => {
               Post
             </button>
           </section>
-          <div className='mb-2 w-[90%]'>
+          <div className='mb-2 w-[100%]'>
             <ReactQuill style={{width: '100%'}} placeholder='Content' modules={modules} theme="snow" value={content} onChange={setContent} />
           </div>
           <input 

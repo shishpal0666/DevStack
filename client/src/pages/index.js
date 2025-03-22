@@ -9,6 +9,7 @@ import Bookmarks from './Bookmarks';
 import EditBlog from './EditBlog';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
+import SearchedBlogs from './SearchedBlogs';
 import UserPublishedBlogsList from './UserPublishedBlogsList';
 
 const Pages = () => {
@@ -18,7 +19,8 @@ const Pages = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
           <Route path="/my-blogs" element={<PrivateRoute><UserPublishedBlogsList /></PrivateRoute>} />
-          <Route path="/:id" element={<Blog />} />
+          <Route path="/blog/:id" element={<Blog />} />
+          <Route path="/tag/:name" element={<SearchedBlogs />} />
         </Route>
         <Route element={<LayoutWithoutNavbar />}> 
           <Route path="/login" element={<LoginPage />} />

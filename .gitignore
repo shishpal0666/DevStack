@@ -15,6 +15,8 @@ server/.env
 
 # misc
 .DS_Store
+/client/.env
+
 /client/.env.local
 /client/.env.development.local
 /client/.env.test.local
@@ -23,3 +25,5 @@ server/.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+OAuth.json

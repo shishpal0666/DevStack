@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import axios from '../Api';
 
 const initialState = {  
   loading: false,
   errors: null,
-  blogData: [],
+  blogsList: [],
+  blogDetails: {},
   bookmarkedBlogs: [],
   searchedBlogs: [],
-  userPublishedBlogs: [],
+  authorPublishedBlogs: [],
 };
 
 const blogsSlice = createSlice({
@@ -16,37 +18,100 @@ const blogsSlice = createSlice({
     setLoading: (state, { payload }) => {
       state.loading = payload;
     },
-    addBlogData: (state, { payload })=>{
-      state.blogData = payload;
+    addBlogs: (state, { payload })=> {
+      state.loading = false;
+      state.blogsList = payload;
+    },
+    addBlogDetails: (state, { payload })=> {
+      state.loading = false;
+      state.blogDetails = payload;
     },
     addBookmarkedBlogs: (state, { payload })=>{
+      state.loading = false;
       state.bookmarkedBlogs = [...state.bookmarkedBlogs, ...payload];
     },
     addSearchedBlogs: (state, { payload })=>{
+      state.loading = false;
       state.searchedBlogs = payload;
     },
-    addUserPublishedBlogs: (state, { payload })=>{
-      state.userPublishedBlogs = [...state.userPublishedBlogs, ...payload];
+    addAuthorPublishedBlogs: (state, { payload })=>{
+      state.loading = false;
+      state.authorPublishedBlogs = [...state.authorPublishedBlogs, ...payload];
     },
     updateUserPublishedBlogs: (state, { payload })=>{
-      state.userPublishedBlogs = payload;
+      state.authorPublishedBlogs = payload;
     },
   },
 });
 
-export const { addBlogData, addUpdatedPostData } = blogsSlice.actions;
+export const { setLoading, addBlogs, addBlogDetails, addSearchedBlogs, addUpdatedPostData } = blogsSlice.actions;
 
 export default blogsSlice.reducer;
 
-export const getSearchedPost = ({postList, searchInput}) => async dispatch => {
-  if(searchInput !== ""){
-    const searchedData = postList?.filter((row) => {
-      const { title, content } = row;
-      return(
-        title.toString().toLowerCase().includes(searchInput?.toLowerCase()) || content.toString().toLowerCase().includes(searchInput?.toLowerCase())
-        )
-      }
-    );
-    dispatch(addUpdatedPostData([...searchedData]));
+export const getAllBlogs = () => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/blog`);
+    dispatch(addBlogs(response.data));
+  } catch (error) {
+    
   }
 }
+
+export const getBlogDataById = (blogId) => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/blog/${blogId}`);
+    dispatch(addBlogDetails(response.data));
+  } catch (error) {
+    
+  }
+}
+
+export const getSearchedBlogs = (searchInput) => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/blog`,{
+      params: {
+        search: searchInput,
+      }
+    });
+    dispatch(addSearchedBlogs(response.data));
+  } catch (error) {
+    
+  }
+}
+
+export const getBlogsByAuthor = (userId) => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/author/${userId}`);
+    dispatch(addBlogsByAuthor(response.data));
+  } catch (error) {
+    
+  }
+}
+
+export const getBookmarkedBlogs = () => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/blog/${blogId}`);
+    dispatch(addBlogDetails(response.data));
+  } catch (error) {
+    
+  }
+}
+
+export const updateBookmarkedBlogs = () => async(dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = axios.get(`/blog/${blogId}`);
+    dispatch(addBlogDetails(response.data));
+  } catch (error) {
+    
+  }
+}
+
+
+
+

@@ -1,7 +1,10 @@
 import React from 'react'
 import { BiSolidBookmark } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
+import Img from '../../assets/contact_app.png';
 
-const BlogCard = ({ title, content, dateCreated, author, tagsList= null }) => {
+const BlogCard = ({ id, title, content, dateCreated, author, tagsList= null }) => {
+
   return (
     <article className='relative'>
       <button className='group absolute bottom-0 right-0 '>
@@ -14,16 +17,25 @@ const BlogCard = ({ title, content, dateCreated, author, tagsList= null }) => {
           <span className='text-[#c4bebe]'>&#8226;</span>
           <span className='text-sm text-[#585858]'>{dateCreated}</span>
         </section>
-        <section className='flex flex-col items-start justify-start gap-2 mb-2'>
-          <h1 className='text-xl font-semibold'>{title}</h1>
-          <div className='line-clamp-3'>{content}</div>
-        </section>
+        <Link to={"/blog/" + id}>
+          <section className='flex items-center justify-between'>
+            <section className='flex flex-col items-start justify-start gap-2 mb-2'>
+              <h1 className='text-xl font-semibold'>{title}</h1>
+              <div className='line-clamp-3'>{content}</div>
+            </section>
+            <section className=' overflow-hidden'>
+              <img src={Img} alt="img" />
+            </section>
+          </section>
+        </Link>
         <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
           {
             tagsList?.map((tag) => {
               return(
                 <>
-                  <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
+                  <Link to={"/tag/" + tag}>
+                    <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
+                  </Link>
                 </>
               )
             })
