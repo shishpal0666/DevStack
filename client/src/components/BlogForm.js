@@ -28,6 +28,17 @@ const BlogForm = () => {
 
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
+  const [tag, setTag] = useState();
+  const [tagList, setTagsList] = useState([]);
+
+  const handleEnterKey = (event) => {
+    if(event.key === "Enter"){
+      setTagsList((tagList) => (
+        [...tagList , tag]
+      ))
+      setTag('');
+    }
+  }
 
   return (
     <>
@@ -38,7 +49,7 @@ const BlogForm = () => {
             type="text"
             value={title} 
             onChange={(e) => {setTitle(e.target.value)}}
-            className="p-4 text-2xl border-[1px] border-solid border-[#ecebeb] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
+            className="w-[30%] p-4 text-2xl border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
             placeholder="Title"
             />
             <button className='px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none mr-4'>
@@ -48,6 +59,27 @@ const BlogForm = () => {
           <div className='mb-2 w-[90%]'>
             <ReactQuill style={{width: '100%'}} placeholder='Content' modules={modules} theme="snow" value={content} onChange={setContent} />
           </div>
+          <input 
+            type="text"
+            value={tag} 
+            onChange={(e) => {setTag(e.target.value)}}
+            onKeyDown={handleEnterKey}
+            className="w-[28%] p-5 text-lg border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-2xl placeholder:font-medium placeholder:text-[#777373] focus:"
+            placeholder="Add tags"
+            />
+            <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
+            {
+              tagList?.map((tag) => {
+                return(
+                  <>
+                    <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
+                    {tag}
+                    </span>
+                  </>
+                )
+              })
+            }
+            </section>
         </div>
       </div>
     </>

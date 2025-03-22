@@ -6,7 +6,6 @@ const LoginPage = () => {
 
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [showSignUpForm, setShowSignUpForm] = useState(false);
-  console.log(showSignUpForm);
   
   const handleSignInButton = () => {
     setShowLoginForm(true);

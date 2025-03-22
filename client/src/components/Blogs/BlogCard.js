@@ -9,13 +9,13 @@ const BlogCard = ({ title, content, dateCreated, author, tagsList= null }) => {
       </button>
       <div className='flex flex-col items-start justify-start gap-4'>
         <section className='flex flex-row items-center justify-start gap-2'>
-          <div className='py-1 px-2 bg-[#1A8917] text-sm text-white rounded-full'>{author.charAt(0)}</div>
+          <div className='py-1 px-[10px] bg-[#1A8917] text-base text-white rounded-full'>{author.charAt(0)}</div>
           <span className='text-sm font-semibold mr-1'>{author}</span>
           <span className='text-[#c4bebe]'>&#8226;</span>
           <span className='text-sm text-[#585858]'>{dateCreated}</span>
         </section>
         <section className='flex flex-col items-start justify-start gap-2 mb-2'>
-          <h1 className='text-xl font-bold'>{title}</h1>
+          <h1 className='text-xl font-semibold'>{title}</h1>
           <div className='line-clamp-3'>{content}</div>
         </section>
         <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
