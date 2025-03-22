@@ -10,7 +10,8 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
-app.use('/user', userRoutes);
+app.use('/blog', blogRoutes);
+app.use('/auth', userRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => app.listen(process.env.PORT, ()=> console.log(`Server is listening on port: ${process.env.PORT}`)))
