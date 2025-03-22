@@ -4,17 +4,14 @@ import SignUpForm from '../components/UserForm/SignUpForm';
 
 const LoginPage = () => {
 
-  const [showLoginForm, setShowLoginForm] = useState(true);
-  const [showSignUpForm, setShowSignUpForm] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
   
   const handleSignInButton = () => {
-    setShowLoginForm(true);
-    setShowSignUpForm(false);
+    setIsSignup(false)
   }
 
   const handleSignUpButton = () => {
-    setShowLoginForm(false);
-    setShowSignUpForm(true);
+    setIsSignup(true)
   }
 
   return (
@@ -22,11 +19,11 @@ const LoginPage = () => {
        <div className='fixed z-20 top-0 left-0 right-0 w-full h-full flex justify-center items-center bg-white overflow-y-auto overflow-x-hidden'>
           <div className='w-auto shadow-2xl'>
             {
-              showLoginForm
+              isSignup
               ?
-              <LoginForm handleSignUpButton={handleSignUpButton} />
-              :
               <SignUpForm handleSignInButton={handleSignInButton} />
+              :
+              <LoginForm handleSignUpButton={handleSignUpButton} />
             }
           </div>
         </div>
@@ -34,4 +31,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default LoginPage;

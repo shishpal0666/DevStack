@@ -8,6 +8,7 @@ import Blog from './Blog';
 import EditBlog from './EditBlog';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const Pages = () => {
   return (
