@@ -1,11 +1,56 @@
 import React, { useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
+import { useDispatch } from 'react-redux';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBar = () => {
-  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSearch = (value) => {
-    setSearch(value);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const [searchValue, setSearchValue] = useState(searchParams.get("search") || '');
+  
+  const handleSearch = (e) => {
+    setSearchValue(e.target.value);
+  }
+  
+  // const tag = searchParams.get('tag');
+  // const handleEnterKey = (e) => {
+  //   if( e.key === 'Enter'){
+  //     if(!tag){
+  //       const query = {
+  //         search: searchValue,
+  //       }
+  //       navigate({
+  //         pathname: '/search',
+  //         search: createSearchParams(query).toString()
+  //       })
+  //     }
+  //     else{
+  //       const query = {
+  //         search: searchValue,
+  //         tag: tag
+  //       }
+  //       navigate({
+  //         pathname: '/search',
+  //         search: createSearchParams(query).toString()
+  //       })
+  //     }
+  //   }
+  // }
+
+  const handleEnterKey = (e) => {
+    if(e.key === 'Enter'){
+      searchValue !== ''
+      ?
+      navigate({
+        pathname: '/search',
+        search:  createSearchParams({search: searchValue}).toString(),
+      })
+      :
+      navigate('/');
+    }
   }
 
   return (
@@ -15,8 +60,9 @@ const SearchBar = () => {
         className="pl-8 pr-2 py-2 bg-[#f7f5f5] outline-none rounded-full text-sm"
         type="text"
         placeholder="Search"
-        onChange={(e) => handleSearch(e.target.value)}
-        value={search}/>
+        onKeyDown={handleEnterKey}
+        onChange={(e) => handleSearch(e)}
+        value={searchValue}/>
     </div>
   )
 }

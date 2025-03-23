@@ -16,21 +16,25 @@ export const authSlice = createSlice({
     },
     getUserSuccess: (state, { payload }) => {
       state.loading = false;
-      state.userData = payload;
+      state.userData = {...payload};
       state.error = {isError: false, message: ''};
     },
     getUserFailure: (state, { payload }) => {
       state.loading = false;
+      state.userData = {};
       state.error = {isError: true, message: payload};
     },
+    removeUser: (state) => {
+      state.userData =  {}
+    }
   },
 });
 
-export const { setLoading, getUserSuccess, getUserFailure } = authSlice.actions;
+export const { setLoading, getUserSuccess, getUserFailure, removeUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const signUpUserWithGoogle = (data) => async (dispatch) => {
+export const signUpUserWithGoogle = (data, callback) => async (dispatch) => {
    try {
     dispatch(setLoading(true));
     const response = await axios.post('/auth/google', {
@@ -38,15 +42,20 @@ export const signUpUserWithGoogle = (data) => async (dispatch) => {
     });
     if (response.status === 201 || response.status === 200) {
       console.log(response.data);
-      dispatch(getUserSuccess(response.data));
+      dispatch(getUserSuccess(response.data.result));
+      localStorage.setItem("blog-user", JSON.stringify(response.data.result));
+
+      if(callback) {
+        callback();
+      }
     }
   } catch (error) {
-    console.log(error);
-    dispatch(getUserFailure("ndjn"))
+    console.log(error.response.data.message);
+    dispatch(getUserFailure(error.response.data.message))
   }
 }
 
-export const signUpUser = (data) => async (dispatch) => {
+export const signUpUser = (data, callback) => async (dispatch) => {
   const { firstName, lastName, email, password, confirmPassword } = data;
   try {
     dispatch(setLoading(true));
@@ -56,15 +65,21 @@ export const signUpUser = (data) => async (dispatch) => {
       {  firstName, lastName, email, password, confirmPassword },
     );
     if (response.status === 201) {
-      dispatch(getUserSuccess(response.data));
+      console.log(response.data);
+      dispatch(getUserSuccess(response.data.result));
+      localStorage.setItem("blog-user", JSON.stringify(response.data.result));
+
+      if(callback) {
+        callback();
+      }
     }
   } catch (error) {
-    console.log(error);
-    dispatch(getUserFailure("ndjn"))
+    console.log(error.response.data.message);
+    dispatch(getUserFailure(error.response.data.message))
   }
 };
 
-export const loginUser = (data) => async (dispatch) => {
+export const loginUser = (data, callback) => async (dispatch) => {
   const { email, password } = data;
   try {
     dispatch(setLoading(true));
@@ -74,10 +89,32 @@ export const loginUser = (data) => async (dispatch) => {
       { email, password },
     );
     if (response.status === 200) {
-      dispatch(getUserSuccess(response.data));
+      dispatch(getUserSuccess(response.data.result));
+      localStorage.setItem("blog-user", JSON.stringify(response.data.result));
+
+      if(callback) {
+        callback();
+      }
     }
   } catch (error) {
-    console.log(error);
-    dispatch(getUserFailure())
+    console.log(error.response.data.message);
+    dispatch(getUserFailure(error.response.data.message))
   }
 };
+
+// export const setUserData = (user) => dispatch => {
+//   localStorage.setItem("blog-user", JSON.stringify(user));
+//   dispatch(setUser(user));
+// }
+
+export const getUserData = () => dispatch => {
+  const userData = localStorage.getItem("blog-user");
+  dispatch(getUserSuccess(JSON.parse(userData)));
+}
+
+export const removeUserData = () => async dispatch => {
+  const response = await axios.get("/auth/signout");
+  console.log(response);
+  localStorage.removeItem("blog-user");
+  dispatch(removeUser());
+}

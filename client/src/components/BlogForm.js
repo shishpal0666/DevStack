@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createNewBlog } from '../redux/slices/blogsSlice';
 
 const modules = {
   toolbar: [
@@ -24,20 +27,32 @@ const modules = {
   },
 }
 
-const BlogForm = () => {
+const BlogForm = ({initialTitle= '', initialContent='', initialTagList=[]}) => {
 
-  const [title, setTitle] = useState();
-  const [content, setContent] = useState();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
   const [tag, setTag] = useState();
-  const [tagList, setTagsList] = useState([]);
+  const [tagList, setTagsList] = useState(initialTagList);
 
   const handleEnterKey = (event) => {
     if(event.key === "Enter"){
-      setTagsList((tagList) => (
-        [...tagList , tag]
-      ))
+      if(tag !== ''){
+        setTagsList((tagList) => (
+          [...tagList , tag.trim()]
+        ))
+      }
       setTag('');
     }
+  }
+
+  const gotoIndexPage = () => {
+    navigate("/");
+  }
+
+  const handlePostButton = () => {
+    dispatch(createNewBlog({title, content, tagList}, gotoIndexPage));
   }
 
   return (
@@ -52,7 +67,7 @@ const BlogForm = () => {
             className="w-[30%] p-4 text-2xl border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
             placeholder="Title"
             />
-            <button className='px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none mr-4'>
+            <button onClick={handlePostButton} className='px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none mr-4'>
               Post
             </button>
           </section>
@@ -86,4 +101,4 @@ const BlogForm = () => {
   )
 }
 
-export default BlogForm
+export default BlogForm;

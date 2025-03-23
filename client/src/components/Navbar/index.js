@@ -1,23 +1,50 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { AiOutlinePlus } from 'react-icons/ai'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 import SearchBar from './SearchBar'
 import LoginForm from '../UserForm/LoginForm'
 import SignUpForm from '../UserForm/SignUpForm'
+import NavbarProfileDroddown from './NavbarProfileDroddown'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
 
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignUpForm, setShowSignUpForm] = useState(false);
-  
-  const handleSignInButton = () => {
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const { name, imgUrl } = useSelector((store) => store.auth.userData)
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location);
+    closeProfileDropdown();
+  },[location])
+
+  const handleSignInButton = (e) => {
+    e.stopPropagation();
     setShowLoginForm(true);
     setShowSignUpForm(false);
   }
 
-  const handleSignUpButton = () => {
+  const handleSignUpButton = (e) => {
+    e.stopPropagation();
     setShowLoginForm(false);
     setShowSignUpForm(true);
+  }
+
+  const handleCloseModal = () => {
+    setShowLoginForm(false);
+    setShowSignUpForm(false);
+  }
+
+  const handleToggleProfileDropdown = (e) => {
+    e.stopPropagation();
+    setShowProfileDropdown(!showProfileDropdown);
+  }
+
+  const closeProfileDropdown = () => {
+    setShowProfileDropdown(false);
   }
 
   return (
@@ -26,14 +53,14 @@ const Navbar = () => {
         showLoginForm
         && 
         <div className='fixed z-20 top-0 left-0 right-0 w-full h-full flex justify-center items-center bg-black/70 overflow-y-auto overflow-x-hidden'>
-          <LoginForm handleSignUpButton={handleSignUpButton}/>
+          <LoginForm handleSignUpButton={handleSignUpButton} gotoIndexPage={handleCloseModal}/>
         </div>
       }
       { 
         showSignUpForm
         && 
         <div className='fixed z-20 top-0 left-0 right-0 w-full h-full flex justify-center items-center bg-black/70 overflow-y-auto overflow-x-hidden'>
-          <SignUpForm handleSignInButton={handleSignInButton}/>
+          <SignUpForm handleSignInButton={handleSignInButton} gotoIndexPage={handleCloseModal}/>
         </div>
       }
       <div className='sticky top-0 z-10 bg-white w-full h-auto px-8 py-1 border-b-[1px] border-solid border-[#f0eeee]'>
@@ -50,9 +77,35 @@ const Navbar = () => {
               </div>
               <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-[1px] bg-[#a09d9d]"></span>
             </Link>
-            <button className='mx-4 my-2 px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none' onClick={handleSignInButton}>
-              Sign in
-            </button>
+            {
+              name 
+              ?
+              <div className='mx-4 my-2 relative '>
+                {
+                showProfileDropdown
+                &&
+                <div className='absolute z-20 top-12 h-auto w-auto right-0 bg-white border-[1px] border-[#ebe8e8] border-solid shadow-md overflow-y-auto overflow-x-hidden'>
+                  <NavbarProfileDroddown closeProfileDropdown={closeProfileDropdown} />
+                </div>
+                }
+                <button className='flex items-center justify-normal border-none' onClick={handleToggleProfileDropdown}> 
+                  <div className='flex items-center justify-center'>
+                    {
+                      imgUrl
+                      ?
+                      <img src={imgUrl} alt={name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
+                      : 
+                      <span className='bg-[#1A8917] hover:bg-[#105a0f] px-3 py-1 rounded-full text-white font-medium text-base '>{name.charAt(0)}</span>
+                    }
+                  </div>
+                  <MdKeyboardArrowDown className={showProfileDropdown && 'rotate-180'}/>
+                </button>
+              </div>
+              :
+              <button className='mx-4 my-2 px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none' onClick={handleSignInButton}>
+                Sign in
+              </button>
+            }
           </section>
         </div>
       </div>  

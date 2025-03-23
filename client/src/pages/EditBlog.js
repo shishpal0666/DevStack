@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import BlogForm from '../components/BlogForm'
 
 const EditBlog = () => {
   return (
-    <div>EditBlog</div>
+    <div className='block m-auto max-w-[1336px] h-auto'>
+      <BlogForm />
+    </div>
   )
 }
 

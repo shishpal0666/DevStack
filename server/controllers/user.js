@@ -20,7 +20,6 @@ export const signin = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if(!existingUser){
-      console.log("user does not exist");
       return res.status(404).json({ message: "User doesn't exist. Please Signup" });
     }
     
@@ -31,7 +30,6 @@ export const signin = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
 
     if(!isPasswordCorrect){
-      console.log("password not right");
       return res.status(400).json({ message: "Invalid credentials"});
     }
 
@@ -135,4 +133,17 @@ export const verifyToken = async(id_token) => {
   } catch (error) {
     console.log(error);
   }
+}
+
+export const signout = async(req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(201).json({message: "Successfully logged out"});
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong"});
+  }
+}
+
+export const checkUserStatus = async(req, res) => {
+  res.status(200).send({ message: 'Token not expired'});
 }

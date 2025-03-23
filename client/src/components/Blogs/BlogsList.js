@@ -51,14 +51,14 @@ const blogList = [
   },
 ]
 
-const BlogsList = () => {
+const BlogsList = ({blogsList}) => {
   return (
-    <main className='mt-10 mx-4 flex-auto md:min-w-[500px] md:max-w-[768px] flex flex-col items-center justify-start gap-6'>
+    <main className='mt-10 mx-4 flex-auto md:min-w-[500px] md:max-w-[768px] flex flex-col items-start justify-start gap-6'>
       {
-        blogList?.map((blog, index) => {
+        blogsList?.map((blog, index) => {
           return(
             <>
-              <BlogCard key={blog.id} {...blog}/>
+              <BlogCard key={blog._id} {...blog}/>
               <div className='w-full h-[1px] bg-[#f0eeee]'></div>
             </>
           )
@@ -68,4 +68,4 @@ const BlogsList = () => {
   )
 }
 
-export default BlogsList
+export default BlogsList;
