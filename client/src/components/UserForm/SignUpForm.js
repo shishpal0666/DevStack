@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import GoogleIcon from '../../assets/google.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { signUpUser, signUpUserWithGoogle } from '../../redux/slices/authSlice';
+import useOutsideClick from '../../helpers/useOutsideClick';
 
 const initialState = {
   firstName: '',
@@ -13,25 +14,32 @@ const initialState = {
   password: '',
   confirmPassword: '',
 }
-const SignUpForm = ({handleSignInButton}) => {
+const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
+  const ref = useRef();
 
-  const handleTogglePassword = () => {
+  useOutsideClick(ref, () => {
+    gotoIndexPage();
+  });
+
+  const handleTogglePassword = (e) => {
+    e.stopPropagation();
     setShowPassword(!showPassword);
   }
 
-  const handleToggleConfirmPassword = () => {
+  const handleToggleConfirmPassword = (e) => {
+    e.stopPropagation();
     setShowConfirmPassword(!showConfirmPassword);
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-    dispatch(signUpUser(formData));
+    dispatch(signUpUser(formData, gotoIndexPage));
   }
 
   const handleChange = (e) => {
@@ -42,14 +50,13 @@ const SignUpForm = ({handleSignInButton}) => {
   const login = useGoogleLogin({
     onSuccess: async (data) => {
       console.log(data);
-      dispatch(signUpUserWithGoogle(data))
+      dispatch(signUpUserWithGoogle(data, gotoIndexPage))
     },
     flow: 'auth-code',
-    redirect_uri: "http://localhost:3000/",
   })
 
   return (
-    <div className='w-[600px] h-[600px] bg-white p-6 pt-0'>
+    <div ref={ref} className='w-[600px] h-[600px] bg-white p-6 pt-0'>
       <div className='w-full h-full flex flex-col items-center justify-evenly'>
         <h1 className='font-medium text-2xl tracking-wider text-[#4d4949]'>Sign-Up</h1>
         <section className='w-auto flex flex-col items-center justify-between'>
