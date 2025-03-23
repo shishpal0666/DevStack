@@ -44,18 +44,37 @@ export const createBlog = async (req, res) => {
   }
 }
 
+export const getPopularTags = async(req, res) => {
+
+  try {
+    const response = await Blog.aggregate([{ $unwind: "$tags" },{ $group: { /* execute 'grouping' */
+      _id: '$tags', /* using the 'token' value as the _id */
+      count: { $sum: 1 } /* create a sum value */
+    }},
+    { "$sort" : { "count" : -1 } }
+  ]).limit(15);
+    console.log(response);
+    return res.status(200).json({data: response, success: true});
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 export const updateBlog = async (req, res) => {
     const { id } = req.params;
     const blogData = req.body;
-
-    try {
-      const response = await Blog.findByIdAndUpdate(id, blogData, { new: true });
-      res.status(201).json(response);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
+    console.log(req.user._id.toString(), blogData.authorId);
+    if(req.user._id.toString() !== blogData.authorId){
+      return res.status(403).json({message: 'User is not authorized to update the data'});
     }
-    
-    res.json(updatedPost);
+    else{
+      try {
+        const response = await Blog.findByIdAndUpdate(id, blogData, { new: true });
+        res.status(201).json(response);
+      } catch (error) {
+        res.status(404).json({ message: error.message });
+      }
+    }
   }
   
 export const deleteBlog = async (req, res) => {
@@ -73,12 +92,12 @@ export const getBlogsByAuthor = async (req, res) => {
     const { id } = req.params;
     const currentPage = Number(req.query.page) || 1;
     const LIMIT = 10;
-    const skipPosts = (currentPage - 1) * LIMIT;
+    const skipBlogs = (currentPage - 1) * LIMIT;
     try {
         const total = await Blog.countDocuments({author: id});
-        const posts = await Blog.find({ author: id }).populate("author").sort({ createdAt: -1 }).limit(LIMIT).skip(skipPosts);
+        const blogs = await Blog.find({ author: id }).populate("author").sort({ createdAt: -1 }).limit(LIMIT).skip(skipBlogs);
 
-        res.status(200).json({ data: posts, currentPage: Number(currentPage), numberOfPages: Math.ceil(total / LIMIT) });
+        res.status(200).json({ data: blogs, current: Number(currentPage), numberOfPages: Math.ceil(total / LIMIT) });
 
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -138,29 +157,20 @@ export const saveUnsaveBlog = async (req, res) => {
 
 export const getBookmarkedBlogs = async (req, res) => {
 
+  const currentPage = Number(req.query.page) || 1;
+  const LIMIT = 10;
+  const skipPosts = (currentPage - 1) * LIMIT;
+  
   try {
     const user = await User.findById(req.user._id);
-    const data = await Blog.find({ '_id': { $in: user.blogsSaved } }).populate("author").sort({ createdAt: -1 });
-
-    return res.status(200).json({data: data, success: true});
+    const total = await Blog.countDocuments({ '_id': { $in: user.blogsSaved } });
+    const blogs = await Blog.find({ '_id': { $in: user.blogsSaved } }).populate("author").sort({ createdAt: -1 }).limit(LIMIT).skip(skipPosts);
+    
+    res.status(200).json({ data: blogs, current: Number(currentPage), numberOfPages: Math.ceil(total / LIMIT) });
   } catch (error) {
-      res.status(404).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 }
-
-export const getPopularTags = async (req, res) => {
-
-  try {
-    const user = await User.findById(req.user._id);
-    console.log(user.blogsSaved);
-    const data = await Blog.find({ '_id': { $in: user.blogsSaved } }).populate("author").sort({ createdAt: -1 });
-
-    return res.status(200).json({data: data, success: true});
-  } catch (error) {
-      res.status(404).json({ message: error.message });
-  }
-}
-
 
 // export const deletePost = async (req, res) => {
 //     const { id } = req.params;

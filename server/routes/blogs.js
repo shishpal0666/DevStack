@@ -11,6 +11,7 @@ router.get('/author/:id', auth, getBlogsByAuthor);
 router.get('/bookmarks', auth, getBookmarkedBlogs );
 router.get('/populartags', getPopularTags );
 router.get('/', getBlogs);
+router.get('/topics', getPopularTags);
 router.get('/:id', getBlogDetails);
 
 router.post('/bookmarks/:id', auth, saveUnsaveBlog );
