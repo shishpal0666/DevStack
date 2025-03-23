@@ -8,18 +8,27 @@ import { getBlogsByAuthor } from '../redux/slices/blogsSlice'
 const UserPublishedBlogsList = ({type}) => {
   const params = useParams();
   const dispatch = useDispatch();
-  const { userPublishedBlogs } = useSelector((store) => store.blog);
+
+  const { userPublishedBlogs: blogsData } = useSelector((store) => store.blog);
   const { _id } = useSelector((store) => store.auth.userData);
 
   useEffect(() => {
     if(type === 1){
-      const userData = JSON.parse(localStorage.getItem("blog-user"));
-      dispatch(getBlogsByAuthor(_id));
+      dispatch(getBlogsByAuthor({userId: _id}));
     }
     else{
-      dispatch(getBlogsByAuthor(params.id));
+      dispatch(getBlogsByAuthor({userId: params.id}));
     }
-  }, [params.id, type]);
+  }, [params.id, type, _id]);
+
+  const handleShowMoreButton = () => {
+    if(type === 1){
+      dispatch(getBlogsByAuthor({userId: _id, page: blogsData?.currentPage + 1}));
+    }
+    else{
+      dispatch(getBlogsByAuthor({userId: params.id, page: blogsData?.currentPage + 1}));
+    }
+  }
 
   return (
     <div className='p-14 flex flex-col items-start justify-start gap-4'>
@@ -30,7 +39,7 @@ const UserPublishedBlogsList = ({type}) => {
       </section>
       <div className='w-full h-[1px] bg-[#f0eeee] mt-6'></div>
       <div className='flex justify-start w-full'>
-        <BlogsList blogsList={userPublishedBlogs}/>
+        <BlogsList blogsData={blogsData} callback={handleShowMoreButton} />
       </div>
     </div>
   )

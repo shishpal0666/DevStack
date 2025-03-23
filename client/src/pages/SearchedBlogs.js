@@ -10,25 +10,34 @@ const SearchedBlogs = ({type}) => {
   const params = useParams();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const { searchedBlogs } = useSelector((store) => store.blog);
+  const { searchedBlogs: blogsData } = useSelector((store) => store.blog);
 
   const searchInput = searchParams.get('search');
 
   useEffect(() => {
     if(type === "search"){
-      dispatch(getSearchedBlogs(searchInput));
+      dispatch(getSearchedBlogs({searchInput}));
     }
     else{
-      dispatch(getBlogsByTopic(params.name));
+      dispatch(getBlogsByTopic({topicName: params.name}));
     }
   },[searchParams, params.name, type])
+
+  const handleShowMoreButton = () => {
+    if(type === "search"){
+      dispatch(getSearchedBlogs({searchInput, page:blogsData.currentPage + 1}));
+    }
+    else{
+      dispatch(getBlogsByTopic({topicName: params.name, page:blogsData.currentPage + 1}));
+    }
+  }
 
   return (
     <div className='p-14 flex flex-col items-start justify-start gap-4'>
       <h1 className='font-semibold tracking-wider text-3xl text-[#333131]'>Results for {params.name} {searchInput}</h1>
       <div className='w-full h-[1px] bg-[#f0eeee] mt-6'></div>
       <div className='flex justify-start w-full'>
-        <BlogsList blogsList={searchedBlogs}/>
+        <BlogsList blogsData={blogsData} callback={handleShowMoreButton}/>
       </div>
     </div>
   )

@@ -17,16 +17,14 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    console.log(bookmarkedBlogsId);
     setIsBookmarked((isBookmarked) => {
       return bookmarkedBlogsId.includes(_id)
     })
   },[bookmarkedBlogsId])
 
   useEffect(() => {
-    console.log(bookmarkedBlogs);
     setIsBookmarked((isBookmarked) => {
-      return bookmarkedBlogs.some((blog) => blog._id === _id);
+      return bookmarkedBlogs.blogsList.some((blog) => blog._id === _id);
     })
   },[bookmarkedBlogs])
 

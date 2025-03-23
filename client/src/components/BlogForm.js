@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createNewBlog } from '../redux/slices/blogsSlice';
+import { createNewBlog, updateBlog } from '../redux/slices/blogsSlice';
 
 const modules = {
   toolbar: [
@@ -27,7 +27,7 @@ const modules = {
   },
 }
 
-const BlogForm = ({initialTitle= '', initialContent='', initialTagList=[]}) => {
+const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', initialTagList=[]}) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const BlogForm = ({initialTitle= '', initialContent='', initialTagList=[]}) => {
     if(event.key === "Enter"){
       if(tag !== ''){
         setTagsList((tagList) => (
-          [...tagList , tag.trim()]
+          [...tagList , tag.toLowerCase().trim()]
         ))
       }
       setTag('');
@@ -48,11 +48,16 @@ const BlogForm = ({initialTitle= '', initialContent='', initialTagList=[]}) => {
   }
 
   const gotoIndexPage = () => {
-    navigate("/");
+    navigate("/", { replace: true });
   }
 
   const handlePostButton = () => {
-    dispatch(createNewBlog({title, content, tagList}, gotoIndexPage));
+    if(type === 'add'){
+      dispatch(createNewBlog({title, content, tagList}, gotoIndexPage));
+    }
+    else{
+      dispatch(updateBlog({title, content, tagList, blogId, authorId}, gotoIndexPage));
+    }
   }
 
   return (

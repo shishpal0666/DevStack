@@ -8,12 +8,12 @@ const BlogDetails = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { blogDetails } = useSelector((store) => store.blog);
+  const { blogDetails, loading } = useSelector((store) => store.blog);
   const { userData } = useSelector((store) => store.auth);
   const { _id, title, content, createdAt, author, tags } = blogDetails;
   
   const gotoIndexPage = () => {
-    navigate("/");
+    navigate("/", { replace: true });
   }
 
   const handleEditButton = () => {
@@ -25,7 +25,13 @@ const BlogDetails = () => {
   }
 
   return (
-    <div className='flex justify-center break-words'>
+    <>
+    {
+      loading
+      ?
+      <span>loading...</span>
+      :
+      <div className='flex justify-center break-words'>
       <div className=' md:max-w-[52rem] mx-6 w-full'>
         <div className='flex flex-col items-start justify-normal mt-12'>
           <section className='w-full flex flex-row items-center justify-between'>
@@ -55,7 +61,7 @@ const BlogDetails = () => {
             <span className='text-[#c4bebe]'>&#8226;</span>
             <span className='text-sm text-[#585858]'>{createdAt?.split('T')[0]}</span>
           </section>
-          <section className='mt-10' dangerouslySetInnerHTML={{__html: content}}>
+          <section className='mx-2 my-10' dangerouslySetInnerHTML={{__html: content}}>
           </section>
           <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
           {
@@ -74,6 +80,8 @@ const BlogDetails = () => {
         </div>
       </div>
     </div>
+    }
+    </>
   )
 }
 

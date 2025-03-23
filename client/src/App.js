@@ -4,7 +4,7 @@ import Pages from "./pages";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getUserSuccess } from "./redux/slices/authSlice";
 import { useDispatch } from "react-redux";
-import { getBookmarkedBlogs } from "./redux/slices/blogsSlice";
+import { getBookmarkedBlogs, getPopularTopicsList } from "./redux/slices/blogsSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ function App() {
     const userData = localStorage.getItem("blog-user");
     dispatch(getUserSuccess(JSON.parse(userData)));
     dispatch(getBookmarkedBlogs());
+    dispatch(getPopularTopicsList());
   },[])
 
   return (

@@ -1,5 +1,7 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import BlogCard from './BlogCard'
+import { MdKeyboardDoubleArrowDown } from 'react-icons/md';
 
 const blogList = [
   {
@@ -51,9 +53,25 @@ const blogList = [
   },
 ]
 
-const BlogsList = ({blogsList}) => {
+const BlogsList = ({blogsData, callback}) => {
+
+  const {blogsList, totalPages, currentPage} = blogsData;
+
+  const { loading } = useSelector((store) => store.blog);
+  const handleShowMoreButton = () => {
+    if(totalPages > currentPage){
+      callback();
+    }
+  }
+
   return (
-    <main className='mt-10 mx-4 flex-auto md:min-w-[500px] md:max-w-[768px] flex flex-col items-start justify-start gap-6'>
+    <>
+    {
+      loading
+      ?
+      <span>loading</span>
+      :
+      <main className='mt-10 mb-10 mx-4 flex-auto md:min-w-[500px] md:max-w-[768px] flex flex-col items-start justify-start gap-6'>
       {
         blogsList?.map((blog, index) => {
           return(
@@ -64,7 +82,17 @@ const BlogsList = ({blogsList}) => {
           )
         })
       }
+      {
+        totalPages > currentPage
+        &&
+        <button onClick={handleShowMoreButton} className='mx-auto px-2 flex flex-col items-center justify-center text-slate-600 hover:text-[#1f83aa]'>
+          <MdKeyboardDoubleArrowDown className='text-2xl'/>
+          <div className='flex items-center justify-center text-sm font-medium' >Show More</div>
+        </button>
+      }
     </main>
+    }
+    </>
   )
 }
 

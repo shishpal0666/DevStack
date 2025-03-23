@@ -3,7 +3,7 @@ import GoogleIcon from '../../assets/google.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser, signUpUserWithGoogle } from '../../redux/slices/authSlice';
 import useOutsideClick from '../../helpers/useOutsideClick';
 
@@ -16,6 +16,7 @@ const initialState = {
 }
 const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
 
+  const { loading } = useSelector((store) => store.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState(initialState);
@@ -56,7 +57,10 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
   })
 
   return (
-    <div ref={ref} className='w-[600px] h-[600px] bg-white p-6 pt-0'>
+    <div ref={ref} className='relative w-[600px] h-[600px] bg-white p-6 pt-0'>
+      {
+        loading && <span className='absolute top-0 left-[50%]'>loading...</span>
+      }
       <div className='w-full h-full flex flex-col items-center justify-evenly'>
         <h1 className='font-medium text-2xl tracking-wider text-[#4d4949]'>Sign-Up</h1>
         <section className='w-auto flex flex-col items-center justify-between'>

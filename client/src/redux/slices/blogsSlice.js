@@ -5,12 +5,29 @@ import { removeUserData } from './authSlice';
 const initialState = {  
   loading: false,
   error: {isError: false, message: ''},
-  blogsList: [],
+  blogsData: {
+    totalPages: 0,
+    currentPage: 0,
+    blogsList: [],
+  },
   blogDetails: {},
   bookmarkedBlogsId: [],
-  bookmarkedBlogs: [],
-  searchedBlogs: [],
-  userPublishedBlogs: [],
+  bookmarkedBlogs: {
+    totalPages: 0,
+    currentPage: 0,
+    blogsList: [],
+  },
+  searchedBlogs: {
+    totalPages: 0,
+    currentPage: 0,
+    blogsList: [],
+  },
+  userPublishedBlogs: {
+    totalPages: 0,
+    currentPage: 0,
+    blogsList: [],
+  },
+  mostPopularTopics: [],
 };
 
 const blogsSlice = createSlice({
@@ -30,12 +47,19 @@ const blogsSlice = createSlice({
     },
     setBlogsSuccess: (state, { payload })=> {
       state.loading = false;
-      state.blogsList = payload;
+      state.blogsData.blogsList = [...state.blogsData.blogsList, ...payload.data];
+      state.blogsData.totalPages = payload.numberOfPages;
+      state.blogsData.currentPage = payload.current;
       state.error = {isError: false, message: ''};
     },
     setBlogsFailure: (state, { payload })=> {
       state.loading = false;
       state.error = {isError: true, message: payload};
+    },
+    resetBlogs: (state, {payload}) => {
+      state.blogsData.blogsList = [];
+      state.blogsData.totalPages = 0;
+      state.blogsData.currentPage = 0;
     },
     setBlogDetailsSuccess: (state, { payload })=> {
       state.loading = false;
@@ -46,57 +70,89 @@ const blogsSlice = createSlice({
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
-    setBookmarkedBlogSuccess: (state, { payload }) => {
-      state.loading = false;
-      state.bookmarkedBlogs = payload;
+    setMostPopularTopicsSuccess: (state, { payload })=> {
+      state.mostPopularTopics = payload.data;
       state.error = {isError: false, message: ''};
     },
-    setBookmarkedBlogFailure: (state, { payload }) => {
+    setMostPopularTopicsFailure: (state, { payload })=> {
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
+    setBookmarkedBlogSuccess: (state, { payload }) => {
+      state.bookmarkedBlogs.blogsList = [...state.bookmarkedBlogs.blogsList, ...payload.data];
+      state.bookmarkedBlogs.totalPages = payload.numberOfPages;
+      state.bookmarkedBlogs.currentPage = payload.current;
+      state.error = {isError: false, message: ''};
+    },
+    setBookmarkedBlogFailure: (state, { payload }) => {
+      state.error = {isError: true, message: payload};
+    },
+    resetBookmarkedBlogs: (state, {payload}) => {
+      state.bookmarkedBlogs.blogsList = [];
+      state.bookmarkedBlogs.totalPages = 0;
+      state.bookmarkedBlogs.currentPage = 0;
+    },
     setBookmarkedBlogIdSuccess: (state, { payload }) => {
-      state.loading = false;
       state.bookmarkedBlogsId = payload;
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogIdFailure: (state, { payload }) => {
-      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     setSearchedBlogsSuccess: (state, { payload })=>{
       state.loading = false;
-      state.searchedBlogs = payload;
+      state.searchedBlogs.blogsList = [...state.searchedBlogs.blogsList, ...payload.data];
+      state.searchedBlogs.totalPages = payload.numberOfPages;
+      state.searchedBlogs.currentPage = payload.current;
       state.error = {isError: false, message: ''};
     },
     setSearchedBlogsFailure: (state, { payload })=>{
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
+    resetSearchedBlogs: (state, {payload}) => {
+      state.searchedBlogs.blogsList = [];
+      state.searchedBlogs.totalPages = 0;
+      state.searchedBlogs.currentPage = 0;
+    },
     setUserPublishedBlogsSuccess: (state, { payload })=>{
       state.loading = false;
-      state.userPublishedBlogs = payload;
+      state.userPublishedBlogs.blogsList = [...state.userPublishedBlogs.blogsList, ...payload.data];
+      state.userPublishedBlogs.totalPages = payload.numberOfPages;
+      state.userPublishedBlogs.currentPage = payload.current;
       state.error = {isError: false, message: ''};
     },
     setUserPublishedBlogsFailure: (state, { payload })=>{
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
+    resetUserPublishedBlogs: (state, {payload}) => {
+      state.userPublishedBlogs.blogsList = [];
+      state.userPublishedBlogs.totalPages = 0;
+      state.userPublishedBlogs.currentPage = 0;
+    },
   },
 });
 
-export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, setBlogDetailsSuccess, setBlogDetailsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure } = blogsSlice.actions;
+export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
 
 export default blogsSlice.reducer;
 
-export const getAllBlogs = () => async(dispatch) => {
+export const getAllBlogs = (page) => async(dispatch) => {
+  if (page === undefined){
+    dispatch(resetBlogs());
+  }
   try {
     dispatch(setLoading(true));
-    const response = await axios.get(`/blog`);
-    dispatch(setBlogsSuccess(response.data.data));
+    const response = await axios.get(`/blog`,{
+      params:{
+        page,
+      }
+    });
+    dispatch(setBlogsSuccess(response.data));
   } catch (error) {
     console.log(error.message);
-    dispatch(setBlogsFailure(error.message))
+    dispatch(setBlogsFailure(error.response.data.message))
   }
 }
 
@@ -107,36 +163,46 @@ export const getBlogDetails = (blogId) => async(dispatch) => {
     dispatch(setBlogDetailsSuccess(response.data));
   } catch (error) {
     console.log(error.message);
-    dispatch(setBlogDetailsFailure(error.message))
+    dispatch(setBlogDetailsFailure(error.response.data.message))
   }
 }
 
-export const getBlogsByAuthor = (userId) => async(dispatch) => {
-  console.log(userId);
+export const getBlogsByAuthor = ({userId, page}) => async(dispatch) => {
+  if (page === undefined){
+    dispatch(resetUserPublishedBlogs());
+  }
   try {
     dispatch(setLoading(true));
-    const response = await axios.get(`/blog/author/${userId}`);
-    dispatch(setUserPublishedBlogsSuccess(response.data.data));
+    const response = await axios.get(`/blog/author/${userId}`,{
+      params:{
+        page,
+      }
+    });
+    dispatch(setUserPublishedBlogsSuccess(response.data));
   } catch (error) {
-    console.log(error.message);
+    console.log(error.response.data.message);
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
-    dispatch(setUserPublishedBlogsFailure(error.message))
+    dispatch(setUserPublishedBlogsFailure(error.response.data.message))
   }
 }
 
-export const getSearchedBlogs = (searchInput) => async(dispatch) => {
-
+export const getSearchedBlogs = ({searchInput, page}) => async(dispatch) => {
+  console.log(page);
+  if (page === undefined){
+    dispatch(resetSearchedBlogs());
+  }
   try {
     dispatch(setLoading(true));
     const response = await axios.get(`/blog/search?`, {
       params: {
         search: searchInput,
+        page,
       },
     });
     console.log(response.data);
-    dispatch(setSearchedBlogsSuccess(response.data.data));
+    dispatch(setSearchedBlogsSuccess(response.data));
   } catch (error) {
     console.log(error);
     if(error.response.status === 401){
@@ -146,13 +212,20 @@ export const getSearchedBlogs = (searchInput) => async(dispatch) => {
   }
 }
 
-export const getBlogsByTopic = (topicName) => async(dispatch) => {
+export const getBlogsByTopic = ({topicName, page}) => async(dispatch) => {
   
+  if (page === undefined){
+    dispatch(resetSearchedBlogs());
+  }
+
   try {
-    dispatch(setLoading(true));
-    const response = await axios.get(`/blog/topic/${topicName}`)
+    const response = await axios.get(`/blog/topic/${topicName}`,{
+      params:{
+        page,
+      }
+    });
     console.log(response.data);
-    dispatch(setSearchedBlogsSuccess(response.data.data));
+    dispatch(setSearchedBlogsSuccess(response.data));
 
   } catch (error) {
     console.log(error);
@@ -188,7 +261,6 @@ export const createNewBlog = (blogData, callback) => async(dispatch) => {
 
 export const BookmarkBlog = (id) => async(dispatch) => {
   try {
-    dispatch(setLoading(true));
     const response = await axios.post(`/blog/bookmarks/${id}`);
     console.log(response.data);
     dispatch(setBookmarkedBlogIdSuccess(response.data.data))
@@ -201,12 +273,18 @@ export const BookmarkBlog = (id) => async(dispatch) => {
   }
 }
 
-export const getBookmarkedBlogs = () => async(dispatch) => {
+export const getBookmarkedBlogs = (page) => async(dispatch) => {
+  if (page === undefined){
+    dispatch(resetBookmarkedBlogs());
+  }
   try {
-    dispatch(setLoading(true));
-    const response = await axios.get(`/blog/bookmarks`);
-    console.log(response.data);
-    dispatch(setBookmarkedBlogSuccess(response.data.data))
+    const response = await axios.get(`/blog/bookmarks`,{
+      params:{
+        page,
+      }
+    });
+    
+    dispatch(setBookmarkedBlogSuccess(response.data))
   } catch (error) {
     console.log(error)
     if(error.response.status === 401){
@@ -216,22 +294,23 @@ export const getBookmarkedBlogs = () => async(dispatch) => {
   }
 }
 
-export const getTagsList = () => async(dispatch) => {
+export const getPopularTopicsList = () => async(dispatch) => {
   try {
-    dispatch(setLoading(true));
-    const response = await axios.get(`/blog/populartags`);
-    console.log(response.data);
+    const response = await axios.get(`/blog/topics`);
+
+    dispatch(setMostPopularTopicsSuccess(response.data));
   } catch (error) {
     console.log(error);
+    dispatch(setMostPopularTopicsFailure(error.response.data.message))
   }
 }
 
 export const updateBlog = (blogData, callback) => async(dispatch) => {
-  const { _id: blogId } = blogData;
+  const { blogId } = blogData;
   dispatch(setLoading(true));
   try {
     const response = await axios.patch(`/blog/${blogId}`, blogData);
-    console.log(response.data);
+    console.log(response);
     if(callback){
       callback();
     }
@@ -240,6 +319,7 @@ export const updateBlog = (blogData, callback) => async(dispatch) => {
       if(error.response.status === 401){
         dispatch(removeUserData());
       }
+      
       dispatch(addBlogFailure(error.response.data.message));
   }
 }
