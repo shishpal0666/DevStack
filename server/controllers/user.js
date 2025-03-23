@@ -20,6 +20,7 @@ export const signin = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if(!existingUser){
+      console.log("user does not exist");
       return res.status(404).json({ message: "User doesn't exist. Please Signup" });
     }
     
@@ -30,14 +31,16 @@ export const signin = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
 
     if(!isPasswordCorrect){
+      console.log("password not right");
       return res.status(400).json({ message: "Invalid credentials"});
     }
 
-    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "1h"});
+    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
 
-    res.status(200).cookie.json({result: existingUser, token});
+    res.status(200).cookie("token", token, { httpOnly: true }).json({ result: existingUser })
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong"});
   }
 }
@@ -46,7 +49,7 @@ export const signup = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword} = req.body;
 
   try{
-    const existingUser = await findOne({ email });
+    const existingUser = await User.findOne({ email });
 
     if(existingUser){
       if(existingUser?.external_id){
@@ -61,35 +64,51 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = new User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`});
+    const newUser = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`});
 
-    //sendCookie
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h"});
-
-    res.status(200).json({ newUser, token })
+    res.status(201).cookie("token", token, { httpOnly: true }).json({ result: newUser })
   }
   catch(error){
+    console.log(error);
     res.status(500).json({ message: "Something went wrong"});
   }
 }
 
 export const googleSignin = async(req, res) => {
 
-  const { tokens } = await oAuth2Client.getToken(req.body.response); // exchange code for tokens
+  const { tokens } = await oAuth2Client.getToken(req.body.data); // exchange code for tokens
   console.log(tokens);
   oAuth2Client.setCredentials({tokens});
 
   const result = await verifyToken(tokens?.id_token);
-  const { name, email, picture, sub, iss } = result;
+  const { name, email, picture, sub, iss, email_verified } = result;
 
-  const newUser = {name, email, imgUrl: picture, external_type: iss, external_id: sub };
-  const createUser = User.updateOne({ external_type: result.iss, external_id: result.sub }, newUser,{ upsert: true });
-
-  console.log(createUser);
-
-  const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "1h"});
-  res.status(200).json({ newUser, token })
+  if (email_verified) {
+    const existingUser = await User.findOne({ external_id: result.sub });
+    try {
+      if (!existingUser) {
+  
+        const newUser = await User.create({ name, email, imgUrl: picture, external_type: iss, external_id: sub });
+  
+        const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "2d"});
+  
+        res.status(201).cookie("token", token, { httpOnly: true }).json({ result: newUser })
+      }
+      else{
+        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
+  
+        res.status(200).cookie("token", token, { httpOnly: true }).json({ result: existingUser })
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  }
+  else{
+    return res.status(400).json({ message: "Google login failed try again"});
+  }
 }
 
 export const getRefreshTokens = async(req, res) => {

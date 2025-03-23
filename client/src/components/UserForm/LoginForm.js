@@ -3,11 +3,14 @@ import GoogleIcon from '../../assets/google.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginUser, signUpUserWithGoogle } from '../../redux/slices/authSlice';
 
 const LoginForm = ({handleSignUpButton}) => {
 
   const [formData, setFormData] = useState({email: '', password: ''})
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -16,6 +19,7 @@ const LoginForm = ({handleSignUpButton}) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
+    dispatch(loginUser(formData))
   }
 
   const handleChange = (e) => {
@@ -24,16 +28,13 @@ const LoginForm = ({handleSignUpButton}) => {
   }
 
   const login = useGoogleLogin({
-    onSuccess: async (response) => {
-      console.log(response);
-      const result = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-        headers: {  
-        "Content-Type": 'application/json', 
-        "Authorization": `Bearer ${response.access_token}` }
-      });
-      console.log(result.data);
-    }
-  });
+    onSuccess: async (data) => {
+      console.log(data);
+      dispatch(signUpUserWithGoogle(data))
+    },
+    flow: 'auth-code',
+    redirect_uri: "http://localhost:3000/",
+  })
 
   return (
     <div className='w-[600px] h-[600px] bg-white p-6 pt-0'>

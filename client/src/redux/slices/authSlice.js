@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import axios from '../Api';
 
 const initialState = {  
   loading: false,
-  errors: null,
+  error: {isError: false, message: ''},
   userData: {},
 };
 
@@ -16,11 +17,11 @@ export const authSlice = createSlice({
     getUserSuccess: (state, { payload }) => {
       state.loading = false;
       state.userData = payload;
-      state.errors = false;
+      state.error = {isError: false, message: ''};
     },
-    getUserFailure: (state) => {
+    getUserFailure: (state, { payload }) => {
       state.loading = false;
-      state.errors = true;
+      state.error = {isError: true, message: payload};
     },
   },
 });
@@ -31,37 +32,52 @@ export default authSlice.reducer;
 
 export const signUpUserWithGoogle = (data) => async (dispatch) => {
    try {
-    dispatch(setLoading());
-
-    // const response = await axios.post(
-    //   "users/registration",
-    //   formatSignUpApiData(data)
-    // );
-    if (response.data.message === "Account created successfully") {
-      const message = "Account Created";
+    dispatch(setLoading(true));
+    const response = await axios.post('/auth/google', {
+      data,
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log(response.data);
       dispatch(getUserSuccess(response.data));
-      if (callback) callback();
     }
   } catch (error) {
-    if (error.response.data.error === "record not unique") {
-      const message2 = "User already exist";
-      dispatch(getAccountFailure());
-    }
+    console.log(error);
+    dispatch(getUserFailure("ndjn"))
   }
 }
 
-export const signUpUser = (data, callback) => async (dispatch) => {
+export const signUpUser = (data) => async (dispatch) => {
+  const { firstName, lastName, email, password, confirmPassword } = data;
   try {
+    dispatch(setLoading(true));
 
+    const response = await axios.post(
+      "/auth/signup",
+      {  firstName, lastName, email, password, confirmPassword },
+    );
+    if (response.status === 201) {
+      dispatch(getUserSuccess(response.data));
+    }
   } catch (error) {
-
+    console.log(error);
+    dispatch(getUserFailure("ndjn"))
   }
 };
 
-export const loginUser = (data, callback) => async (dispatch) => {
+export const loginUser = (data) => async (dispatch) => {
+  const { email, password } = data;
   try {
+    dispatch(setLoading(true));
 
+    const response = await axios.post(
+      "/auth/signin",
+      { email, password },
+    );
+    if (response.status === 200) {
+      dispatch(getUserSuccess(response.data));
+    }
   } catch (error) {
-
+    console.log(error);
+    dispatch(getUserFailure())
   }
 };
