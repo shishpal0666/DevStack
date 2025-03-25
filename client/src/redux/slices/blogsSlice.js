@@ -70,6 +70,9 @@ const blogsSlice = createSlice({
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
+    resetBlogDetails: (state, {payload})=>{
+      state.blogDetails = {};
+    },
     setMostPopularTopicsSuccess: (state, { payload })=> {
       state.mostPopularTopics = payload.data;
       state.error = {isError: false, message: ''};
@@ -85,6 +88,7 @@ const blogsSlice = createSlice({
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogFailure: (state, { payload }) => {
+      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     resetBookmarkedBlogs: (state, {payload}) => {
@@ -97,6 +101,7 @@ const blogsSlice = createSlice({
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogIdFailure: (state, { payload }) => {
+      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     setSearchedBlogsSuccess: (state, { payload })=>{
@@ -134,7 +139,7 @@ const blogsSlice = createSlice({
   },
 });
 
-export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
+export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, resetBlogDetails, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
 
 export default blogsSlice.reducer;
 
@@ -219,6 +224,7 @@ export const getBlogsByTopic = ({topicName, page}) => async(dispatch) => {
   }
 
   try {
+    dispatch(setLoading(true));
     const response = await axios.get(`/blog/topic/${topicName}`,{
       params:{
         page,

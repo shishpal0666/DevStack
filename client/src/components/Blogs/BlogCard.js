@@ -13,7 +13,6 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
 
   const { email } = useSelector((store) => store.auth.userData);
   const { bookmarkedBlogsId, bookmarkedBlogs } = useSelector((store) => store.blog);
-
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
 
   return (
     <article className='relative w-full'>
-      <button onClick={handleBookmarkButton} className='group absolute bottom-0 right-0'>
+      <button onClick={handleBookmarkButton} className='group p-1 absolute bottom-0 right-0'>
         <BiSolidBookmark className={`${isBookmarked ? 'text-[#1A8917] stroke-none' : 'text-white'} stroke-1 w-5 h-5 stroke-[#585858]`} />
       </button>
       <div className='flex flex-col items-start justify-start gap-4'>

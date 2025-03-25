@@ -6,6 +6,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser, signUpUserWithGoogle } from '../../redux/slices/authSlice';
 import useOutsideClick from '../../helpers/useOutsideClick';
+import LoadingComponent from '../LoadingComponent';
 
 const initialState = {
   firstName: '',
@@ -59,7 +60,7 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
   return (
     <div ref={ref} className='relative w-[600px] h-[600px] bg-white p-6 pt-0'>
       {
-        loading && <span className='absolute top-0 left-[50%]'>loading...</span>
+        loading && <LoadingComponent />
       }
       <div className='w-full h-full flex flex-col items-center justify-evenly'>
         <h1 className='font-medium text-2xl tracking-wider text-[#4d4949]'>Sign-Up</h1>
@@ -109,7 +110,7 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
                 required
                 minLength={8}
                 />
-              <button className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword}>
+              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword}>
               {
                 showPassword 
                 ?
@@ -130,7 +131,7 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
                 required
                 minLength={8}
                 />
-              <button className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleToggleConfirmPassword}>
+              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleToggleConfirmPassword}>
               {
                 showConfirmPassword 
                 ?

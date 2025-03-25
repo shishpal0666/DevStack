@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { deleteBlog } from '../../redux/slices/blogsSlice';
+import { deleteBlog, resetBlogDetails } from '../../redux/slices/blogsSlice';
+import LoadingComponent from '../LoadingComponent';
 
 const BlogDetails = () => {
 
@@ -11,6 +12,10 @@ const BlogDetails = () => {
   const { blogDetails, loading } = useSelector((store) => store.blog);
   const { userData } = useSelector((store) => store.auth);
   const { _id, title, content, createdAt, author, tags } = blogDetails;
+  
+  useEffect(() => {
+    dispatch(resetBlogDetails());
+  },[])
   
   const gotoIndexPage = () => {
     navigate("/", { replace: true });
@@ -25,36 +30,39 @@ const BlogDetails = () => {
   }
 
   return (
-    <>
-    {
-      loading
-      ?
-      <span>loading...</span>
-      :
-      <div className='flex justify-center break-words'>
-      <div className=' md:max-w-[52rem] mx-6 w-full'>
+    <div className='flex justify-center break-words'>
+      <div className=' md:max-w-[52rem] relative mx-6 w-full'>
+        { loading && <LoadingComponent />}
         <div className='flex flex-col items-start justify-normal mt-12'>
           <section className='w-full flex flex-row items-center justify-between'>
             <h1 className='text-4xl font-bold w-[80%]'>{title}</h1>
             <div className='flex items-center justify-start gap-3 text-2xl text-gray-600'>
               {
+                !loading
+                &&
+                (
                 author?._id === userData?._id
                 &&
                 <>
                   <AiOutlineEdit onClick={handleEditButton} className='cursor-pointer'/> 
                   <AiOutlineDelete onClick={handleDeleteButton} className='cursor-pointer'/>
                 </>
+                )
               }
             </div>
           </section>
           <section className='mt-10 flex flex-row items-center justify-start gap-2'>
             <div className=' text-base text-white rounded-full'>
               {
-                author?.imgUrl
+                !loading
+                &&
+                (
+                author?.imgUrl 
                 ?
                 <img src={author.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
                 : 
-                <span className='bg-[#1A8917] hover:bg-[#105a0f] px-3 py-1 rounded-full text-white font-medium text-base '>{author?.name.charAt(0)}</span>
+                <span className='bg-[#1A8917] px-3 py-1 rounded-full text-white font-medium text-base '>{author?.name.charAt(0)}</span>
+                )
               }
             </div>
             <span className='text-base font-semibold mr-1'>{author?.name}</span>
@@ -80,8 +88,6 @@ const BlogDetails = () => {
         </div>
       </div>
     </div>
-    }
-    </>
   )
 }
 
