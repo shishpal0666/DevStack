@@ -123,7 +123,11 @@ export const getBlogsByTopic = async (req, res) => {
     const { name } = req.params;
 
     try {
-      const blogs = await Blog.find({tags: name}).populate("author");
+      const blogs = await Blog.find({tags:  { $elemMatch: { 
+          $regex: name, 
+          $options: 'i' 
+        }
+      }}).populate("author");
 
       res.status(200).json({ data: blogs });
 
@@ -142,13 +146,13 @@ export const saveUnsaveBlog = async (req, res) => {
       user.blogsSaved = user.blogsSaved.filter((p) => p.toString() !== post._id.toString());
       await user.save();
 
-      return res.status(200).json({data: user.blogsSaved, success: true, message: "Post Unsaved"});
+      return res.status(200).json({data: user.blogsSaved, success: true, message: "Blog Unsaved"});
     }
     else {
       user.blogsSaved.push(post._id);
       await user.save();
 
-      return res.status(200).json({data: user.blogsSaved, success: true, message: "Post Saved"});
+      return res.status(200).json({data: user.blogsSaved, success: true, message: "Blog Saved"});
     }
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -171,52 +175,5 @@ export const getBookmarkedBlogs = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 }
-
-// export const deletePost = async (req, res) => {
-//     const { id } = req.params;
-
-//     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-
-//     await PostMessage.findByIdAndRemove(id);
-
-//     res.json({ message: "Post deleted successfully." });
-// }
-
-// export const likePost = async (req, res) => {
-//     const { id } = req.params;
-
-//     if (!req.userId) {
-//         return res.json({ message: "Unauthenticated" });
-//     }
-
-//     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-
-//     const post = await PostMessage.findById(id);
-
-//     const index = post.likes.findIndex((id) => id === String(req.userId));
-
-//     if (index === -1) {
-//         post.likes.push(req.userId);
-//     } else {
-//         post.likes = post.likes.filter((id) => id !== String(req.userId));
-//     }
-
-//     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
-
-//     res.status(200).json(updatedPost);
-// }
-
-// export const commentPost = async (req, res) => {
-//     const { id } = req.params;
-//     const { value } = req.body;
-
-//     const post = await PostMessage.findById(id);
-
-//     post.comments.push(value);
-
-//     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
-
-//     res.json(updatedPost);
-// };
 
 export default router;

@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { useDispatch } from 'react-redux';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { createSearchParams, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -14,6 +15,12 @@ const SearchBar = () => {
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
   }
+
+  useEffect(() => {
+    if(location.pathname !== '/search'){
+      setSearchValue('');
+    }
+  },[location.pathname])
   
   // const tag = searchParams.get('tag');
   // const handleEnterKey = (e) => {

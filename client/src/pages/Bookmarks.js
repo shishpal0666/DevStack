@@ -7,11 +7,11 @@ const Bookmarks = () => {
   
   const dispatch = useDispatch();
   const { bookmarkedBlogs: blogsData } = useSelector((store) => store.blog)
-  
+
   useEffect(() => {
     dispatch(getBookmarkedBlogs());
   },[])
-  
+
   const handleShowMoreButton = () => {
     dispatch(getBookmarkedBlogs(blogsData.currentPage + 1))
   }

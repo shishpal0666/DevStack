@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useOutsideClick from '../../helpers/useOutsideClick';
 import { removeUserData } from '../../redux/slices/authSlice';
 
@@ -9,13 +9,17 @@ const NavbarProfileDroddown = ({closeProfileDropdown}) => {
   const dispatch = useDispatch();
   const { name, email } = useSelector((store) => store.auth.userData)
   const ref = useRef();
-
+  const navigate = useNavigate();
   useOutsideClick(ref, () => {
     closeProfileDropdown();
   });
 
+  const gotoIndexPage = () => {
+    navigate("/", { replace: true });
+  }
+
   const handleSignOut = () => {
-    dispatch(removeUserData());
+    dispatch(removeUserData(gotoIndexPage));
   }
 
   return (

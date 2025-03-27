@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from '../Api';
 import { removeUserData } from './authSlice';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialState = {  
   loading: false,
@@ -157,6 +159,7 @@ export const getAllBlogs = (page) => async(dispatch) => {
     dispatch(setBlogsSuccess(response.data));
   } catch (error) {
     console.log(error.message);
+    toast.error(error.response.data.message);
     dispatch(setBlogsFailure(error.response.data.message))
   }
 }
@@ -168,6 +171,7 @@ export const getBlogDetails = (blogId) => async(dispatch) => {
     dispatch(setBlogDetailsSuccess(response.data));
   } catch (error) {
     console.log(error.message);
+    toast.error(error.response.data.message);
     dispatch(setBlogDetailsFailure(error.response.data.message))
   }
 }
@@ -189,12 +193,12 @@ export const getBlogsByAuthor = ({userId, page}) => async(dispatch) => {
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(setUserPublishedBlogsFailure(error.response.data.message))
   }
 }
 
 export const getSearchedBlogs = ({searchInput, page}) => async(dispatch) => {
-  console.log(page);
   if (page === undefined){
     dispatch(resetSearchedBlogs());
   }
@@ -213,6 +217,7 @@ export const getSearchedBlogs = ({searchInput, page}) => async(dispatch) => {
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(setSearchedBlogsFailure(error.response.data.message))
   }
 }
@@ -238,6 +243,7 @@ export const getBlogsByTopic = ({topicName, page}) => async(dispatch) => {
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(setSearchedBlogsFailure(error.response.data.message))
   }
 }
@@ -256,11 +262,14 @@ export const createNewBlog = (blogData, callback) => async(dispatch) => {
     if(callback){
       callback();
     }
+    toast.success('New Blog Created Successfully');
+
   } catch (error) {
     console.log(error)
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(addBlogFailure(error.response.data.message))
   }
 }
@@ -269,12 +278,15 @@ export const BookmarkBlog = (id) => async(dispatch) => {
   try {
     const response = await axios.post(`/blog/bookmarks/${id}`);
     console.log(response.data);
-    dispatch(setBookmarkedBlogIdSuccess(response.data.data))
+    dispatch(setBookmarkedBlogIdSuccess(response.data.data));
+    toast.success(response.data.message);
+
   } catch (error) {
     console.log(error);
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(setBookmarkedBlogIdFailure(error.response.data.message))
   }
 }
@@ -307,12 +319,14 @@ export const getPopularTopicsList = () => async(dispatch) => {
     dispatch(setMostPopularTopicsSuccess(response.data));
   } catch (error) {
     console.log(error);
+    toast.error(error.response.data.message);
     dispatch(setMostPopularTopicsFailure(error.response.data.message))
   }
 }
 
 export const updateBlog = (blogData, callback) => async(dispatch) => {
   const { blogId } = blogData;
+  console.log(blogData);
   dispatch(setLoading(true));
   try {
     const response = await axios.patch(`/blog/${blogId}`, blogData);
@@ -320,12 +334,14 @@ export const updateBlog = (blogData, callback) => async(dispatch) => {
     if(callback){
       callback();
     }
+    toast.success('Blog updated');
+
   } catch (error) {
       console.log(error)
       if(error.response.status === 401){
         dispatch(removeUserData());
       }
-      
+      toast.error(error.response.data.message);
       dispatch(addBlogFailure(error.response.data.message));
   }
 }
@@ -338,11 +354,14 @@ export const deleteBlog = (_id, callback) => async(dispatch) => {
     if(callback){
       callback();
     }
+    toast.success('Blog Deleted Successfully');
+
   } catch (error) {
     console.log(error);
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
+    toast.error(error.response.data.message);
     dispatch(addBlogFailure(error.response.data.message));
   }
 }

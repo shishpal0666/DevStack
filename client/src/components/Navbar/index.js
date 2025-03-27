@@ -17,7 +17,6 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location);
     closeProfileDropdown();
   },[location])
 

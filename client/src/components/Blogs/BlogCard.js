@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Img from '../../assets/contact_app.png';
 import { removeTags } from '../../helpers/removeTags';
 import { BookmarkBlog } from '../../redux/slices/blogsSlice';
+import { toast } from "react-toastify";
 
 const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
 
@@ -32,7 +33,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
       dispatch(BookmarkBlog(_id));
     }
     else{
-      
+      toast.info('Please Login');
     }
   }
 
@@ -64,9 +65,9 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
               <h1 className='text-xl font-semibold'>{title}</h1>
               <div className='line-clamp-3 text-base font-normal'>{plainContent}</div>
             </section>
-            <section className=' w-28 h-auto overflow-hidden'>
+            {/* <section className=' w-28 h-auto overflow-hidden'>
               <img src={Img} alt="img" className=' object-cover'/>
-            </section>
+            </section> */}
           </section>
         </Link>
         <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>

@@ -4,6 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createNewBlog, updateBlog } from '../redux/slices/blogsSlice';
+import { GrFormClose } from 'react-icons/gr'; 
 
 const modules = {
   toolbar: [
@@ -56,8 +57,16 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
       dispatch(createNewBlog({title, content, tagList}, gotoIndexPage));
     }
     else{
-      dispatch(updateBlog({title, content, tagList, blogId, authorId}, gotoIndexPage));
+      dispatch(updateBlog({title, content, tags:tagList, blogId, authorId}, gotoIndexPage));
     }
+  }
+
+  const handleRemoveTagButton = (tag) => {
+    setTagsList((tagsList) => {
+      const newTagsList = tagsList.filter((item) => item !== tag);
+
+      return newTagsList;
+    })
   }
 
   return (
@@ -92,8 +101,11 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
               tagList?.map((tag) => {
                 return(
                   <>
-                    <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
+                    <span className='flex flex-row items-center px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
                     {tag}
+                    <button onClick={() => {handleRemoveTagButton(tag)}} className='p-0 text-base ml-1'>
+                      <GrFormClose />
+                    </button>
                     </span>
                   </>
                 )
