@@ -159,6 +159,34 @@ export const saveUnsaveBlog = async (req, res) => {
   }
 }
 
+export const likeUnlikeBlog = async (req, res) => {
+
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if(blog.likes.includes(req.user._id)){
+      const index = blog.likes.indexOf(req.user._id);
+
+      blog.likes.splice(index, 1);
+      await blog.save();
+
+      return res.status(200).json({data: blog.likes, success: true, message: "Blog Unliked"});
+    }
+    else {
+      blog.likes.push(req.user._id);
+      await blog.save();
+
+      return res.status(200).json({data: blog.likes, success: true, message: "Blog Liked"});
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
+export const commentBlog = async (req, res) => {
+
+}
+
 export const getBookmarkedBlogs = async (req, res) => {
 
   const currentPage = Number(req.query.page) || 1;

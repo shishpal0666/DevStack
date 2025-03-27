@@ -13,6 +13,7 @@ const initialState = {
     blogsList: [],
   },
   blogDetails: {},
+  blogLikesNumber: [],
   bookmarkedBlogsId: [],
   bookmarkedBlogs: {
     totalPages: 0,
@@ -74,6 +75,10 @@ const blogsSlice = createSlice({
     },
     resetBlogDetails: (state, {payload})=>{
       state.blogDetails = {};
+      state.blogDetails = [];
+    },
+    setBlogLikesNumber: (state, {payload}) => {
+      state.blogLikesNumber = payload;
     },
     setMostPopularTopicsSuccess: (state, { payload })=> {
       state.mostPopularTopics = payload.data;
@@ -141,7 +146,7 @@ const blogsSlice = createSlice({
   },
 });
 
-export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, resetBlogDetails, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
+export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, resetBlogDetails, setBlogLikesNumber, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
 
 export default blogsSlice.reducer;
 
@@ -169,9 +174,15 @@ export const getBlogDetails = (blogId) => async(dispatch) => {
     dispatch(setLoading(true));
     const response =  await axios.get(`/blog/${blogId}`);
     dispatch(setBlogDetailsSuccess(response.data));
+    dispatch(setBlogLikesNumber(response.data.likes));
   } catch (error) {
     console.log(error.message);
-    toast.error(error.response.data.message);
+    if(error.response.status === 404){
+      toast.error(error.message);
+    }
+    else{
+      toast.error(error.response.data.message);
+    }
     dispatch(setBlogDetailsFailure(error.response.data.message))
   }
 }
@@ -193,7 +204,12 @@ export const getBlogsByAuthor = ({userId, page}) => async(dispatch) => {
     if(error.response.status === 401){
       dispatch(removeUserData());
     }
-    toast.error(error.response.data.message);
+    if(error.response.status === 404){
+      toast.error(error.message);
+    }
+    else{
+      toast.error(error.response.data.message);
+    }
     dispatch(setUserPublishedBlogsFailure(error.response.data.message))
   }
 }
@@ -355,6 +371,23 @@ export const deleteBlog = (_id, callback) => async(dispatch) => {
       callback();
     }
     toast.success('Blog Deleted Successfully');
+
+  } catch (error) {
+    console.log(error);
+    if(error.response.status === 401){
+      dispatch(removeUserData());
+    }
+    toast.error(error.response.data.message);
+    dispatch(addBlogFailure(error.response.data.message));
+  }
+}
+
+export const likeBlog = (_id) => async(dispatch) => {
+  try {
+    const response = await axios.get(`/blog/likeBlog/${_id}`);
+    console.log(response.data);
+    dispatch(setBlogLikesNumber(response.data.data));
+    toast.success(response.data.message);
 
   } catch (error) {
     console.log(error);

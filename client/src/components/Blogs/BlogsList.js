@@ -22,36 +22,32 @@ const BlogsList = ({blogsData, callback}) => {
         loading && <LoadingComponent />    
       }
       {
-        !loading
-        &&
-        (
-          blogsList.length > 0
-          ?
-          <>
-          {
-            blogsList?.map((blog, index) => {
-              return(
-                <>
-                  <BlogCard key={blog._id} {...blog}/>
-                  <div className='w-full h-[1px] bg-[#f0eeee]'></div>
-                </>
-              )
-            })
-          }
-          {
-            totalPages > currentPage
-            &&
-            <button onClick={handleShowMoreButton} className='mx-auto px-2 flex flex-col items-center justify-center text-slate-600 hover:text-[#1f83aa]'>
-              <MdKeyboardDoubleArrowDown className='text-2xl'/>
-              <div className='flex items-center justify-center text-sm font-medium'>Show More</div>
-            </button>
-          }
-          </>
-          :
-          <div className='w-full flex flex-col justify-start items-start text-base font-medium text-[#585858]'>
-            <span> No blog</span>
-          </div>
-        )
+        blogsList.length > 0
+        ?
+        <>
+        {
+          blogsList?.map((blog, index) => {
+            return(
+              <>
+                <BlogCard key={blog._id} {...blog}/>
+                <div className='w-full h-[1px] bg-[#f0eeee]'></div>
+              </>
+            )
+          })
+        }
+        {
+          totalPages > currentPage
+          &&
+          <button onClick={handleShowMoreButton} className='mx-auto px-2 flex flex-col items-center justify-center text-slate-600 hover:text-[#1f83aa]'>
+            <MdKeyboardDoubleArrowDown className='text-2xl'/>
+            <div className='flex items-center justify-center text-sm font-medium'>Show More</div>
+          </button>
+        }
+        </>
+        :
+        <div className='w-full flex flex-col justify-start items-start text-base font-medium text-[#585858]'>
+          <span> No blog</span>
+        </div>
       }
       </main>
     </>
