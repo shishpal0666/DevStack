@@ -110,7 +110,7 @@ export const getBlogsBySearch = async (req, res) => {
     try {
       const searchInput = new RegExp(search, "i");
       // const blogs = await Blog.find({ $text: {$search: search}}, {tags: tag}).populate("author");
-      const blogs = await Blog.find({ $or: [{'title':  { "$regex": searchInput} }, {'content':  { "$regex": searchInput }}, {'tags': { "$regex": searchInput}}] }).populate("author");
+      const blogs = await Blog.find({ $or: [{'title':  { "$regex": searchInput} }, {'content':  { "$regex": searchInput }}, {'tags': { "$regex": searchInput}}] }).populate("author").sort({ createdAt: -1 });
 
       res.status(200).json({ data: blogs });
 
@@ -121,15 +121,22 @@ export const getBlogsBySearch = async (req, res) => {
 
 export const getBlogsByTopic = async (req, res) => {
     const { name } = req.params;
-
+    const currentPage = Number(req.query.page) || 1;
+    const LIMIT = 10;
+    const skipBlogs = (currentPage - 1) * LIMIT;
     try {
+      const total = await Blog.countDocuments({tags:  { $elemMatch: { 
+        $regex: name, 
+        $options: 'i' 
+      }
+    }});
       const blogs = await Blog.find({tags:  { $elemMatch: { 
           $regex: name, 
           $options: 'i' 
         }
-      }}).populate("author");
+      }}).populate("author").sort({ createdAt: -1 }).limit(LIMIT).skip(skipBlogs);
 
-      res.status(200).json({ data: blogs });
+      res.status(200).json({ data: blogs, current: Number(currentPage), numberOfPages: Math.ceil(total / LIMIT) });
 
     } catch (error) {
         res.status(404).json({ message: error.message });

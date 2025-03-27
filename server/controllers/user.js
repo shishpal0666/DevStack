@@ -33,7 +33,7 @@ export const signin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials"});
     }
 
-    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
+    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
 
     res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
 
@@ -64,7 +64,7 @@ export const signup = async (req, res) => {
 
     const newUser = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`});
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
 
     res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
   }
@@ -90,12 +90,12 @@ export const googleSignin = async(req, res) => {
   
         const newUser = await User.create({ name, email, imgUrl: picture, external_type: iss, external_id: sub });
   
-        const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "2d"});
+        const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "7d"});
   
         res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
       }
       else{
-        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
+        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
   
         res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
       }
