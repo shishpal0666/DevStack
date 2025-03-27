@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import BlogsList from '../components/Blogs/BlogsList';
 import TagsList from '../components/TagsList';
-import { getAllBlogs, getPopularTopicsList } from '../redux/slices/blogsSlice';
+import { getAllBlogs, getBookmarkedBlogs, getPopularTopicsList } from '../redux/slices/blogsSlice';
 
 const LandingPage = () => {
 
@@ -12,11 +12,6 @@ const LandingPage = () => {
   const handleShowMoreButton = () => {
     dispatch(getAllBlogs(blogsData.currentPage + 1))
   }
-  
-  useEffect(() => {
-    dispatch(getAllBlogs());
-  },[])
-
 
   return (
     <div className='block m-auto max-w-[1336px]'>

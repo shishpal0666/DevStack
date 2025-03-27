@@ -51,7 +51,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
                 ?
                 <img src={author?.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
                 : 
-                <span className='bg-[#1A8917] hover:bg-[#105a0f] px-3 py-1 rounded-full text-white font-medium text-base '>{author?.name.charAt(0)}</span>
+                <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
               }
             </div>
             <span className='text-sm font-semibold mr-1'>{author.name}</span>

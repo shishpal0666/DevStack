@@ -95,7 +95,6 @@ const blogsSlice = createSlice({
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogFailure: (state, { payload }) => {
-      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     resetBookmarkedBlogs: (state, {payload}) => {

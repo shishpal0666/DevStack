@@ -3,21 +3,21 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Pages from "./pages";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getUserSuccess } from "./redux/slices/authSlice";
-import { useDispatch } from "react-redux";
-import { getBookmarkedBlogs, getPopularTopicsList } from "./redux/slices/blogsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookmarkedBlogs, getPopularTopicsList, getAllBlogs } from "./redux/slices/blogsSlice";
 import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
   const userData = localStorage.getItem("blog-user");
+  const {email} = useSelector((store) => store.auth.userData);
   
   useEffect(() => {
     dispatch(getUserSuccess(JSON.parse(userData)));
     dispatch(getPopularTopicsList());
-    if( userData ){
-      dispatch(getBookmarkedBlogs());
-    }
-  },[userData?.email])
+    dispatch(getBookmarkedBlogs());
+    dispatch(getAllBlogs());
+  },[email])
 
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_PUBLIC_GOOGLE_API_TOKEN}>

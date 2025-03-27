@@ -35,7 +35,7 @@ export const signin = async (req, res) => {
 
     const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
 
-    res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true }).json({ result: existingUser })
+    res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
 
   } catch (error) {
     console.log(error);
@@ -66,7 +66,7 @@ export const signup = async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
 
-    res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true }).json({ result: newUser })
+    res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
   }
   catch(error){
     console.log(error);
@@ -92,12 +92,12 @@ export const googleSignin = async(req, res) => {
   
         const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "2d"});
   
-        res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true }).json({ result: newUser })
+        res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
       }
       else{
         const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "2d"});
   
-        res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true }).json({ result: existingUser })
+        res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
       }
     } catch (error) {
       console.log(error);
