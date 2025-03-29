@@ -7,7 +7,7 @@ import { removeTags } from '../../helpers/removeTags';
 import { BookmarkBlog } from '../../redux/slices/blogsSlice';
 import { toast } from "react-toastify";
 
-const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
+const BlogCard = ({ _id, title, content, createdAt, author, tags = null }) => {
 
   const dispatch = useDispatch();
   const plainContent = removeTags(content);
@@ -17,17 +17,16 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    console.log(bookmarkedBlogsId);
     setIsBookmarked((isBookmarked) => {
       return bookmarkedBlogsId.includes(_id)
     })
-  },[bookmarkedBlogsId])
+  }, [bookmarkedBlogsId])
 
   const handleBookmarkButton = () => {
-    if(email){
+    if (email) {
       dispatch(BookmarkBlog(_id));
     }
-    else{
+    else {
       toast.info('Please Login');
     }
   }
@@ -43,10 +42,10 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
             <div className='text-base text-white rounded-full'>
               {
                 author?.imgUrl
-                ?
-                <img src={author?.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
-                : 
-                <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
+                  ?
+                  <img src={author?.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain' />
+                  :
+                  <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
               }
             </div>
             <span className='text-sm font-semibold mr-1'>{author.name}</span>
@@ -68,7 +67,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
         <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
           {
             tags?.map((tag) => {
-              return(
+              return (
                 <>
                   {/* <Link to={{ pathname: "/tag", search: `?tag=${tag.toLocaleLowerCase()}` }} >  in case of passing query in link tag */}
                   <Link to={"/topic/" + tag}>

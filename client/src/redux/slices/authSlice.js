@@ -3,9 +3,9 @@ import axios from '../Api';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const initialState = {  
+const initialState = {
   loading: false,
-  error: {isError: false, message: ''},
+  error: { isError: false, message: '' },
   userData: {},
 };
 
@@ -18,16 +18,16 @@ export const authSlice = createSlice({
     },
     getUserSuccess: (state, { payload }) => {
       state.loading = false;
-      state.userData = {...payload};
-      state.error = {isError: false, message: ''};
+      state.userData = { ...payload };
+      state.error = { isError: false, message: '' };
     },
     getUserFailure: (state, { payload }) => {
       state.loading = false;
       state.userData = {};
-      state.error = {isError: true, message: payload};
+      state.error = { isError: true, message: payload };
     },
     removeUser: (state) => {
-      state.userData =  {}
+      state.userData = {}
     }
   },
 });
@@ -37,18 +37,17 @@ export const { setLoading, getUserSuccess, getUserFailure, removeUser } = authSl
 export default authSlice.reducer;
 
 export const signUpUserWithGoogle = (data, callback) => async (dispatch) => {
-   try {
+  try {
     dispatch(setLoading(true));
     const response = await axios.post('/auth/google', {
       data,
     });
     if (response.status === 201 || response.status === 200) {
-      console.log(response.data);
       dispatch(getUserSuccess(response.data.result));
       localStorage.setItem("blog-user", JSON.stringify(response.data.result));
       toast.success('Sign up successfully done');
 
-      if(callback) {
+      if (callback) {
         callback();
       }
     }
@@ -66,14 +65,13 @@ export const signUpUser = (data, callback) => async (dispatch) => {
 
     const response = await axios.post(
       "/auth/signup",
-      {  firstName, lastName, email, password, confirmPassword },
+      { firstName, lastName, email, password, confirmPassword },
     );
     if (response.status === 201) {
-      console.log(response.data);
       dispatch(getUserSuccess(response.data.result));
       localStorage.setItem("blog-user", JSON.stringify(response.data.result));
       toast.success('Sign up successfully done');
-      if(callback) {
+      if (callback) {
         callback();
       }
     }
@@ -97,7 +95,7 @@ export const loginUser = (data, callback) => async (dispatch) => {
       dispatch(getUserSuccess(response.data.result));
       localStorage.setItem("blog-user", JSON.stringify(response.data.result));
       toast.success("Logged in successfully")
-      if(callback) {
+      if (callback) {
         callback();
       }
     }
@@ -124,7 +122,7 @@ export const removeUserData = (callback) => async dispatch => {
     console.log(response);
     localStorage.removeItem("blog-user");
     dispatch(removeUser());
-    if(callback){
+    if (callback) {
       callback();
     }
 

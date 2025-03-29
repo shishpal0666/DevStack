@@ -16,10 +16,10 @@ router.get('/topics', getPopularTags);
 router.get('/:id', getBlogDetails);
 
 router.post('/bookmarks/:id', auth, saveUnsaveBlog);
+router.post('/commentBlog/:id', auth, commentBlog);
+router.get('/likeBlog/:id', auth, likeUnlikeBlog);
 router.post('/', auth, createBlog);
 router.patch('/:id', auth, updateBlog);
 router.delete('/:id', auth, deleteBlog);
-router.get('/likeBlog/:id', auth, likeUnlikeBlog);
-router.post('/commentBlog/:id', auth, commentBlog);
 
 export default router;

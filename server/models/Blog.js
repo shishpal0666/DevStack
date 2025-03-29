@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
+  title: {
+    type: String,
     required: true,
     trim: true,
     index: true,
   },
-  content: { 
-    type: String, 
+  content: {
+    type: String,
     required: true,
     unique: true,
     trim: true,
@@ -18,8 +18,8 @@ const blogSchema = new mongoose.Schema({
     type: String,
     index: true,
   }],
-  author:  {
-    type: mongoose.Schema.Types.ObjectId, 
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
@@ -36,11 +36,15 @@ const blogSchema = new mongoose.Schema({
       type: String,
       required: true,
       trim: true,
-    }
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   }],
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 // blogSchema.index({title: 'text', content: 'text', tags: 'text'});

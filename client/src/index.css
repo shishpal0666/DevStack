@@ -1,28 +1,35 @@
 @tailwind base;
+
 @layer base {
   h1 {
     @apply text-3xl;
   }
+
   h2 {
     @apply text-2xl;
   }
+
   h3 {
     @apply text-xl;
   }
+
   h4 {
     @apply text-lg;
   }
-  p{
+
+  p {
     @apply text-base leading-7;
   }
-  span{
+
+  span {
     @apply text-base leading-7 tracking-normal;
   }
 }
+
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -32,11 +39,11 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-html{
+html {
   scroll-behavior: smooth;
 }
 
-.quill > .ql-container > .ql-editor.ql-blank::before{
+.quill>.ql-container>.ql-editor.ql-blank::before {
   font-size: 30px;
   font-weight: 400;
   color: #a09e9e;
@@ -47,3 +54,10 @@ html{
   min-height: 300px;
 }
 
+.commentForm .ql-container {
+  min-height: 100px;
+}
+
+.commentForm .quill>.ql-container>.ql-editor.ql-blank::before {
+  font-size: 20px;
+}

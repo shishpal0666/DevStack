@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import BlogDetails from '../components/Blogs/BlogDetails';
@@ -15,7 +15,7 @@ const Blog = () => {
 
   return (
     <div className='block m-auto max-w-[1336px] h-auto'>
-      <BlogDetails />      
+      <BlogDetails />
     </div>
   )
 }

@@ -15,7 +15,7 @@ const initialState = {
   password: '',
   confirmPassword: '',
 }
-const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
+const SignUpForm = ({ handleSignInButton, gotoIndexPage }) => {
 
   const { loading } = useSelector((store) => store.auth);
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +40,6 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
     dispatch(signUpUser(formData, gotoIndexPage));
   }
 
@@ -51,7 +50,6 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
 
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      console.log(data);
       dispatch(signUpUserWithGoogle(data, gotoIndexPage))
     },
     flow: 'auth-code',
@@ -72,23 +70,23 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
                 name='firstName'
                 placeholder='First Name'
                 value={formData.firstName}
-                onChange={(e) => {handleChange(e)}}
-                className='text-base p-3 pl-1 w-36 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+                onChange={(e) => { handleChange(e) }}
+                className='text-base p-3 pl-1 w-36 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]'
                 required
                 minLength={2}
                 maxLength={40}
-                />
+              />
               <input
                 type="text"
                 name='lastName'
                 placeholder='Last Name'
                 value={formData.lastName}
                 onChange={handleChange}
-                className='text-base p-3 pl-1 w-40 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+                className='text-base p-3 pl-1 w-40 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]'
                 required
                 minLength={2}
                 maxLength={40}
-                />
+              />
             </section>
             <input
               type="email"
@@ -96,7 +94,7 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
               placeholder='Email'
               value={formData.email}
               onChange={handleChange}
-              className='text-base p-3 pl-1 w-80 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+              className='text-base p-3 pl-1 w-80 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]'
               required
             />
             <div className='group flex justify-between items-center w-80'>
@@ -106,18 +104,18 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
                 placeholder='Password'
                 value={formData.password}
                 onChange={handleChange}
-                className='peer text-base p-3 pl-1 w-full border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+                className='peer text-base p-3 pl-1 w-full border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]'
                 required
                 minLength={8}
-                />
+              />
               <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword}>
-              {
-                showPassword 
-                ?
-                <FaEye />
-                :
-                <FaEyeSlash />
-              }
+                {
+                  showPassword
+                    ?
+                    <FaEye />
+                    :
+                    <FaEyeSlash />
+                }
               </button>
             </div>
             <div className='group flex justify-between items-center w-80'>
@@ -127,18 +125,18 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
                 placeholder='Confirm Password'
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className='peer text-base p-3 pl-1 w-full border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+                className='peer text-base p-3 pl-1 w-full border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]'
                 required
                 minLength={8}
-                />
+              />
               <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleToggleConfirmPassword}>
-              {
-                showConfirmPassword 
-                ?
-                <FaEye />
-                :
-                <FaEyeSlash />
-              }
+                {
+                  showConfirmPassword
+                    ?
+                    <FaEye />
+                    :
+                    <FaEyeSlash />
+                }
               </button>
             </div>
             <button type='submit' className='px-4 py-2 mt-4 bg-[#1A8917] hover:bg-[#105a0f] rounded-full text-white m-auto'>
@@ -148,7 +146,7 @@ const SignUpForm = ({handleSignInButton, gotoIndexPage}) => {
         </section>
         <section className='flex flex-col items-center justify-start'>
           <button className='w-80 p-1 rounded-full border-[1px] border-solid border-[#242424] flex flex-row items-center justify-center text-base' onClick={() => login()}>
-            <img src={GoogleIcon} alt='google' className='w-8 h-8 mr-4'/>
+            <img src={GoogleIcon} alt='google' className='w-8 h-8 mr-4' />
             Sign up with Google
           </button>
           <section className='flex items-center justify-center mt-1'>
