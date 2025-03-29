@@ -79,7 +79,7 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
             value={title} 
             onChange={(e) => {setTitle(e.target.value)}}
             className="w-[30%] p-4 text-2xl border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
-            placeholder="Title"
+            placeholder="Add Title"
             />
             <button onClick={handlePostButton} className='px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none mr-4'>
               Post

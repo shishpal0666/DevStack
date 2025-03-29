@@ -35,7 +35,7 @@ export const signin = async (req, res) => {
 
     const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
 
-    res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
+    res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true, domain: 'blog-mern-backend2.onrender.com' }).json({ result: existingUser })
 
   } catch (error) {
     console.log(error);
@@ -66,7 +66,7 @@ export const signup = async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
 
-    res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
+    res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true, domain: 'blog-mern-backend2.onrender.com' }).json({ result: newUser })
   }
   catch(error){
     console.log(error);
@@ -92,12 +92,12 @@ export const googleSignin = async(req, res) => {
   
         const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: "7d"});
   
-        res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: newUser })
+        res.status(201).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true, domain: 'blog-mern-backend2.onrender.com' }).json({ result: newUser })
       }
       else{
         const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "7d"});
   
-        res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true }).json({ result: existingUser })
+        res.status(200).cookie("token", token, { expires: new Date(Date.now() + 604800000), httpOnly: true, sameSite: 'none', secure: true, domain: 'blog-mern-backend2.onrender.com' }).json({ result: existingUser })
       }
     } catch (error) {
       console.log(error);
@@ -137,7 +137,13 @@ export const verifyToken = async(id_token) => {
 
 export const signout = async(req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie('token', {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      sameSite: 'none', 
+      secure: true,
+      domain: 'blog-mern-backend2.onrender.com'
+    });
     res.status(201).json({message: "Successfully logged out"});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong"});

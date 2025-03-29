@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBlog, getBlogDetails, getBlogs, getBlogsByAuthor, getBlogsBySearch, saveUnsaveBlog, getBookmarkedBlogs, getPopularTags, getBlogsByTopic, updateBlog, deleteBlog, likeUnlikeBlog, commentBlog } from '../controllers/blogs.js';
+import { createBlog, getBlogDetails, getBlogs, getBlogsByAuthor, getBlogsBySearch, saveUnsaveBlog, getBookmarkedBlogs, getBookmarkedBlogsId, getPopularTags, getBlogsByTopic, updateBlog, deleteBlog, likeUnlikeBlog, commentBlog } from '../controllers/blogs.js';
 
 import auth from '../middleware/auth.js';
 
@@ -9,6 +9,7 @@ router.get('/search', getBlogsBySearch);
 router.get('/topic/:name', getBlogsByTopic);
 router.get('/author/:id', auth, getBlogsByAuthor);
 router.get('/bookmarks', auth, getBookmarkedBlogs);
+router.get('/bookmarksId', auth, getBookmarkedBlogsId);
 router.get('/populartags', getPopularTags);
 router.get('/', getBlogs);
 router.get('/topics', getPopularTags);

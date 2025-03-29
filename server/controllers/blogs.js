@@ -211,4 +211,16 @@ export const getBookmarkedBlogs = async (req, res) => {
   }
 }
 
+export const getBookmarkedBlogsId = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.user._id);
+    
+    res.status(200).json({data: user.blogsSaved});
+
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 export default router;
