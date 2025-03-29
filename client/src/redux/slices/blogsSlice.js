@@ -85,7 +85,6 @@ const blogsSlice = createSlice({
       state.error = {isError: false, message: ''};
     },
     setMostPopularTopicsFailure: (state, { payload })=> {
-      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     setBookmarkedBlogSuccess: (state, { payload }) => {
@@ -109,7 +108,6 @@ const blogsSlice = createSlice({
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogIdFailure: (state, { payload }) => {
-      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     resetBookmarkedBlogsId: (state, {payload}) => {

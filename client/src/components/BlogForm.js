@@ -71,15 +71,15 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
 
   return (
     <>
-      <div className='w-[calc(100%_-_8rem)] m-16'>
+      <div className='w-[calc(100%_-_6rem)] m-12'>
         <div className='flex flex-col items-start justify-center gap-8'>
           <section className='w-[100%] flex flex-row items-center justify-between'>
             <input 
             type="text"
             value={title} 
             onChange={(e) => {setTitle(e.target.value)}}
-            className="w-[30%] p-4 text-2xl border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
-            placeholder="Add Title"
+            className="w-[80%] p-4 text-2xl border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-3xl placeholder:font-medium placeholder:text-[#a09e9e] focus:"
+            placeholder="Title"
             />
             <button onClick={handlePostButton} className='px-4 py-2 bg-[#1A8917] hover:bg-[#105a0f] text-white font-medium text-base rounded-full border-none mr-4'>
               Post
@@ -93,8 +93,8 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
             value={tag} 
             onChange={(e) => {setTag(e.target.value)}}
             onKeyDown={handleEnterKey}
-            className="w-[28%] p-5 text-lg border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-2xl placeholder:font-medium placeholder:text-[#777373] focus:"
-            placeholder="Add tags"
+            className="w-[80%] p-5 text-lg border-[1px] border-solid border-[#cac7c7] outline-none placeholder:text-2xl placeholder:font-medium placeholder:text-[#777373] focus:"
+            placeholder="Add Tags"
             />
             <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
             {

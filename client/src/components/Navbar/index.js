@@ -65,7 +65,9 @@ const Navbar = () => {
       <div className='sticky top-0 z-10 bg-white w-full h-auto px-8 py-1 border-b-[1px] border-solid border-[#f0eeee]'>
         <div className='flex items-center justify-between'>
           <section className='m-1'>
-            <div className='font-bold font-logo1 text-2xl'>.blog</div>
+            <Link to={'/'}>
+              <div className='font-bold font-logo1 text-2xl'>.blog</div>
+            </Link>
           </section>
           <section className='flex flex-row items-center justify-between m-1 text-lg w-auto'>
             <SearchBar />

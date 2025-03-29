@@ -1,20 +1,23 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import LayoutWithNavbar from '../components/Layout/WithNavbar';
 import LayoutWithoutNavbar from '../components/Layout/WithoutNavbar';
+import LoadingComponent from '../components/LoadingComponent';
 import { AnonymousRoute } from '../components/Routes/AnonymousRoute';
 import { PrivateRoute } from '../components/Routes/PrivateRoute';
-import AddBlog from './AddBlog';
-import Blog from './Blog';
-import Bookmarks from './Bookmarks';
-import EditBlog from './EditBlog';
-import LandingPage from './LandingPage';
-import LoginPage from './LoginPage';
-import SearchedBlogs from './SearchedBlogs';
-import UserPublishedBlogsList from './UserPublishedBlogsList';
+
+const AddBlog = lazy(() => import("./AddBlog"));
+const Blog = lazy(() => import("./Blog"));
+const Bookmarks = lazy(() => import("./Bookmarks"));
+const EditBlog = lazy(() => import("./EditBlog"));
+const LandingPage = lazy(() => import("./LandingPage"));
+const LoginPage = lazy(() => import("./LoginPage"));
+const SearchedBlogs = lazy(() => import("./SearchedBlogs"));
+const UserPublishedBlogsList = lazy(() => import("./UserPublishedBlogsList"));
 
 const Pages = () => {
   return (
+    <Suspense fallback={<LoadingComponent />}>
       <Routes>
         <Route element={<LayoutWithNavbar />}>
           <Route path="/" element={<LandingPage />} />
@@ -32,7 +35,8 @@ const Pages = () => {
           {/* <PrivateRoute path="/add-blog" component={AddBlog} isAuthenticated={isAuthenticated} />
           <PrivateRoute path="/edit-blog" component={EditBlog} isAuthenticated={isAuthenticated} /> */}
         </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   )
 }
 
