@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { BiSolidBookmark } from 'react-icons/bi';
+import { BiSolidLike } from 'react-icons/bi';
+import { MdOutlineModeComment } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Img from '../../assets/contact_app.png';
 import { removeTags } from '../../helpers/removeTags';
-import { BookmarkBlog } from '../../redux/slices/blogsSlice';
+import { BookmarkBlog, likeBlog } from '../../redux/slices/blogsSlice';
 import { toast } from "react-toastify";
 
-const BlogCard = ({ _id, title, content, createdAt, author, tags = null }) => {
+const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes = [], comments = [], refreshBlogs }) => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const plainContent = removeTags(content);
 
-  const { email } = useSelector((store) => store.auth.userData);
+  const { email, _id: userId } = useSelector((store) => store.auth.userData);
   const { bookmarkedBlogsId, bookmarkedBlogs } = useSelector((store) => store.blog);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -30,6 +33,25 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null }) => {
       toast.info('Please Login');
     }
   }
+
+  // Like button handler
+  const isLiked = Array.isArray(likes) ? likes.includes(userId) : false;
+  const handleLikeButton = () => {
+    if (email) {
+      dispatch(likeBlog(_id)).then(() => {
+        if (typeof refreshBlogs === 'function') {
+          refreshBlogs();
+        }
+      });
+    } else {
+      toast.info('Please Login');
+    }
+  };
+
+  // Comment button handler
+  const handleCommentButton = () => {
+    navigate(`/blog/${_id}`);
+  };
 
   return (
     <article className='relative w-full'>
@@ -59,17 +81,24 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null }) => {
               <h1 className='text-xl font-semibold'>{title}</h1>
               <div className='line-clamp-3 text-base font-normal'>{plainContent}</div>
             </section>
-            {/* <section className=' w-28 h-auto overflow-hidden'>
-              <img src={Img} alt="img" className=' object-cover'/>
-            </section> */}
           </section>
         </Link>
+        {/* Like and Comment counts */}
+        <section className='flex items-center gap-4 mt-2 mb-2'>
+          <button onClick={handleLikeButton} className={`flex items-center gap-1 ${isLiked ? 'text-black' : 'text-[#a19d9d]'} hover:text-black`}>
+            <BiSolidLike className={`text-xl ${isLiked ? 'fill-black' : ''}`} />
+            <span className='text-sm'>{Array.isArray(likes) ? likes.length : likes}</span>
+          </button>
+          <button onClick={handleCommentButton} className='flex items-center gap-1 text-[#a19d9d] hover:text-black'>
+            <MdOutlineModeComment className='text-xl' />
+            <span className='text-sm'>{Array.isArray(comments) ? comments.length : comments}</span>
+          </button>
+        </section>
         <section className='flex items-center justify-start flex-wrap gap-2 w-[80%] h-auto mt-2 mb-2'>
           {
             tags?.map((tag) => {
               return (
                 <>
-                  {/* <Link to={{ pathname: "/tag", search: `?tag=${tag.toLocaleLowerCase()}` }} >  in case of passing query in link tag */}
                   <Link to={"/topic/" + tag}>
                     <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
                   </Link>

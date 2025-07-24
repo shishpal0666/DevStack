@@ -1,10 +1,10 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import BlogCard from './BlogCard'
 import { MdKeyboardDoubleArrowDown } from 'react-icons/md';
 import LoadingComponent from '../LoadingComponent';
 
-const BlogsList = ({blogsData, callback}) => {
+const BlogsList = ({blogsData, callback, refreshBlogs}) => {
 
   const {blogsList, totalPages, currentPage} = blogsData;
 
@@ -29,7 +29,7 @@ const BlogsList = ({blogsData, callback}) => {
           blogsList?.map((blog, index) => {
             return(
               <>
-                <BlogCard key={blog._id} {...blog}/>
+                <BlogCard key={blog._id} {...blog} refreshBlogs={refreshBlogs}/>
                 <div className='w-full h-[1px] bg-[#f0eeee]'></div>
               </>
             )

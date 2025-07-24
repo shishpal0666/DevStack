@@ -4,7 +4,7 @@ import Pages from "./pages";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getUserSuccess } from "./redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookmarkedBlogs, getPopularTopicsList, getAllBlogs, getBookmarkedBlogsId } from "./redux/slices/blogsSlice";
+import { getPopularTopicsList, getAllBlogs, getBookmarkedBlogsId } from "./redux/slices/blogsSlice";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
     dispatch(getPopularTopicsList());
     dispatch(getBookmarkedBlogsId());
     dispatch(getAllBlogs());
-  },[email])
+  }, [dispatch, userData]);
 
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_PUBLIC_GOOGLE_API_TOKEN}>

@@ -37,7 +37,13 @@ const SearchedBlogs = ({type}) => {
       <h1 className='font-semibold tracking-wider text-3xl text-[#333131]'>Results for {params.name} {searchInput}</h1>
       <div className='w-full h-[1px] bg-[#f0eeee] mt-6'></div>
       <div className='flex justify-start w-full'>
-        <BlogsList blogsData={blogsData} callback={handleShowMoreButton}/>
+        <BlogsList blogsData={blogsData} callback={handleShowMoreButton} refreshBlogs={() => {
+          if(type === "search") {
+            dispatch(getSearchedBlogs({searchInput}));
+          } else {
+            dispatch(getBlogsByTopic({topicName: params.name}));
+          }
+        }}/>
       </div>
     </div>
   )

@@ -10,7 +10,7 @@ const Bookmarks = () => {
 
   useEffect(() => {
     dispatch(getBookmarkedBlogs());
-  },[])
+  }, [dispatch])
 
   const handleShowMoreButton = () => {
     dispatch(getBookmarkedBlogs(blogsData.currentPage + 1))

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
-import { BiPlus } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import BlogsList from '../components/Blogs/BlogsList'
 import { getBlogsByAuthor } from '../redux/slices/blogsSlice'
 
@@ -13,13 +12,8 @@ const UserPublishedBlogsList = ({ type }) => {
   const { _id } = useSelector((store) => store.auth.userData);
 
   useEffect(() => {
-    if (type === 1) {
-      dispatch(getBlogsByAuthor({ userId: _id }));
-    }
-    else {
-      dispatch(getBlogsByAuthor({ userId: params.id }));
-    }
-  }, [params.id, type, _id]);
+    dispatch(getBlogsByAuthor({ userId: type === 1 ? _id : params.id }));
+  }, [dispatch, params.id, type, _id]);
 
   const handleShowMoreButton = () => {
     if (type === 1) {
@@ -45,7 +39,13 @@ const UserPublishedBlogsList = ({ type }) => {
       </section>
       <div className='w-full h-[1px] bg-[#f0eeee] mt-6'></div>
       <div className='flex justify-start w-full'>
-        <BlogsList blogsData={blogsData} callback={handleShowMoreButton} />
+        <BlogsList blogsData={blogsData} callback={handleShowMoreButton} refreshBlogs={() => {
+          if (type === 1) {
+            dispatch(getBlogsByAuthor({ userId: _id }));
+          } else {
+            dispatch(getBlogsByAuthor({ userId: params.id }));
+          }
+        }} />
       </div>
     </div>
   )

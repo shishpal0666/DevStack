@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import GoogleIcon from '../../assets/google.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser, signUpUserWithGoogle } from '../../redux/slices/authSlice';

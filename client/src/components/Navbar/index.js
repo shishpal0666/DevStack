@@ -66,7 +66,7 @@ const Navbar = () => {
         <div className='flex items-center justify-between'>
           <section className='m-1'>
             <Link to={'/'}>
-              <div className='font-bold font-logo1 text-2xl'>.blog</div>
+              <div className='font-bold font-logo1 text-2xl'>DevStack</div>
             </Link>
           </section>
           <section className='flex flex-row items-center justify-between m-1 text-lg w-auto'>

@@ -51,7 +51,7 @@ const blogsSlice = createSlice({
     },
     setBlogsSuccess: (state, { payload }) => {
       state.loading = false;
-      state.blogsData.blogsList = [...state.blogsData.blogsList, ...payload.data];
+      state.blogsData.blogsList = payload.data;
       state.blogsData.totalPages = payload.numberOfPages;
       state.blogsData.currentPage = payload.current;
       state.error = { isError: false, message: '' };
@@ -120,7 +120,7 @@ const blogsSlice = createSlice({
     },
     setSearchedBlogsSuccess: (state, { payload }) => {
       state.loading = false;
-      state.searchedBlogs.blogsList = [...state.searchedBlogs.blogsList, ...payload.data];
+      state.searchedBlogs.blogsList = payload.data;
       state.searchedBlogs.totalPages = payload.numberOfPages;
       state.searchedBlogs.currentPage = payload.current;
       state.error = { isError: false, message: '' };
@@ -136,7 +136,7 @@ const blogsSlice = createSlice({
     },
     setUserPublishedBlogsSuccess: (state, { payload }) => {
       state.loading = false;
-      state.userPublishedBlogs.blogsList = [...state.userPublishedBlogs.blogsList, ...payload.data];
+      state.userPublishedBlogs.blogsList = payload.data;
       state.userPublishedBlogs.totalPages = payload.numberOfPages;
       state.userPublishedBlogs.currentPage = payload.current;
       state.error = { isError: false, message: '' };

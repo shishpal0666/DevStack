@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+// ...existing code...
 import { Navigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
