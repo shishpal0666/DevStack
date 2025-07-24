@@ -70,6 +70,8 @@ const Navbar = () => {
                 src={process.env.PUBLIC_URL + '/DevStack.png'} 
                 alt='DevStack Logo' 
                 className='h-12 w-auto object-contain sm:h-14 md:h-16 lg:h-20 max-w-[140px]' 
+                onClick={() => window.location.replace('/')} 
+                style={{ cursor: 'pointer' }}
               />
             </Link>
           </section>
