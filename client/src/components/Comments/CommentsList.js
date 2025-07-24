@@ -12,7 +12,7 @@ const CommentsList = () => {
         blogCommentsList?.slice(0)?.reverse()?.map((comment) => {
           const { _id, name, imgUrl } = comment?.user;
           return (
-            <>
+            <React.Fragment key={comment._id}>
               <div className='my-6 w-full'>
                 <Link to={"/author/" + _id}>
                   <section className='flex flex-row items-center justify-start gap-2'>
@@ -31,7 +31,7 @@ const CommentsList = () => {
                 <section className='p-2 pl-10' dangerouslySetInnerHTML={{ __html: comment.comment }}></section>
               </div>
               <section className='w-full h-[1px] bg-[#e9e6e6]'></section>
-            </>
+            </React.Fragment>
           )
         })
       }

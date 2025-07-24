@@ -14,16 +14,14 @@ const TagsList = () => {
         <section className='flex items-center justify-start flex-wrap gap-y-5 gap-x-3 w-[90%] h-auto mt-2 mb-2'>
         {
           mostPopularTopics?.map((element) => {
-            const {_id: tag} = element;
+            const {_id: tag } = element;
             return(
-              <>
-                {/* <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} > */}
-                <Link to={"/topic/" + tag}>
-                  <span className='px-4 py-2 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
-                    {tag}
-                  </span>
-                </Link>
-              </>
+              // <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >
+              <Link key={tag} to={"/topic/" + tag}>
+                <span className='px-4 py-2 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
+                  {tag}
+                </span>
+              </Link>
             )
           })
         }

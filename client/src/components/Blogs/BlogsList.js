@@ -28,10 +28,10 @@ const BlogsList = ({blogsData, callback, refreshBlogs}) => {
         {
           blogsList?.map((blog, index) => {
             return(
-              <>
-                <BlogCard key={blog._id} {...blog} refreshBlogs={refreshBlogs}/>
+              <React.Fragment key={blog._id}>
+                <BlogCard {...blog} refreshBlogs={refreshBlogs}/>
                 <div className='w-full h-[1px] bg-[#f0eeee]'></div>
-              </>
+              </React.Fragment>
             )
           })
         }

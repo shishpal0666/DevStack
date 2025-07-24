@@ -100,11 +100,11 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
           {
             tags?.map((tag) => {
               return (
-                <>
+                <React.Fragment key={tag}>
                   <Link to={"/topic/" + tag}>
                     <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
                   </Link>
-                </>
+                </React.Fragment>
               )
             })
           }
