@@ -17,18 +17,18 @@ const BlogDetails = () => {
   const navigate = useNavigate();
   const { blogDetails, loading, blogLikesNumber, blogCommentsList } = useSelector((store) => store.blog);
   const { userData } = useSelector((store) => store.auth);
-  const { _id, title, content, createdAt, author, tags, likes } = blogDetails;
+  const { _id, title, content, createdAt, author, tags } = blogDetails;
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     setIsLiked((isLiked) => {
-      return blogLikesNumber?.includes(userData._id);
+      return blogLikesNumber?.includes(userData?._id);
     })
-  }, [blogLikesNumber]);
+  }, [blogLikesNumber, userData?._id]);
 
   useEffect(() => {
     dispatch(resetBlogDetails());
-  }, [])
+  }, [dispatch])
 
   const gotoIndexPage = () => {
     navigate("/", { replace: true });
@@ -52,9 +52,9 @@ const BlogDetails = () => {
     }
   }
 
-  const handleCommentButton = () => {
-    toast.info('Work in progress');
-  }
+  // const handleCommentButton = () => {
+  //   toast.info('Work in progress');
+  // }
 
   return (
     <div className='flex justify-center break-words'>

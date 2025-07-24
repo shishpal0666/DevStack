@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 
-const tagsList = ["React", "Angular", "Git", "Node", "Express", "VS code", "MongoDB", "Javascript", "HTMl", "CSS"]
+// const tagsList = ["React", "Angular", "Git", "Node", "Express", "VS code", "MongoDB", "Javascript", "HTMl", "CSS"]
 const TagsList = () => {
 
   const { mostPopularTopics } = useSelector((store) => store.blog);

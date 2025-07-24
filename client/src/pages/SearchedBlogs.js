@@ -9,7 +9,7 @@ const SearchedBlogs = ({type}) => {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { searchedBlogs: blogsData } = useSelector((store) => store.blog);
 
   const searchInput = searchParams.get('search');
@@ -21,7 +21,7 @@ const SearchedBlogs = ({type}) => {
     else{
       dispatch(getBlogsByTopic({topicName: params.name}));
     }
-  },[searchParams, params.name, type])
+  },[dispatch, searchInput, params.name, type])
 
   const handleShowMoreButton = () => {
     if(type === "search"){

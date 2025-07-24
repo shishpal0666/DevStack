@@ -3,14 +3,14 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Pages from "./pages";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getUserSuccess } from "./redux/slices/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getPopularTopicsList, getAllBlogs, getBookmarkedBlogsId } from "./redux/slices/blogsSlice";
 import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
   const userData = localStorage.getItem("blog-user");
-  const {email} = useSelector((store) => store.auth.userData);
+  // const {email} = useSelector((store) => store.auth.userData);
   
   useEffect(() => {
     dispatch(getUserSuccess(JSON.parse(userData)));

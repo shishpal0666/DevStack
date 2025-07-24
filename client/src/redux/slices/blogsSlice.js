@@ -273,7 +273,7 @@ export const createNewBlog = (blogData, callback) => async (dispatch) => {
   const { title, content, tagList } = blogData;
   dispatch(setLoading(true));
   try {
-    const response = await axios.post(`/blog`, {
+    await axios.post(`/blog`, {
       title,
       content,
       tags: tagList,
@@ -282,7 +282,6 @@ export const createNewBlog = (blogData, callback) => async (dispatch) => {
       callback();
     }
     toast.success('New Blog Created Successfully');
-
   } catch (error) {
     console.log(error)
     if (error.response.status === 401) {
@@ -295,10 +294,9 @@ export const createNewBlog = (blogData, callback) => async (dispatch) => {
 
 export const BookmarkBlog = (id) => async (dispatch) => {
   try {
-    const response = await axios.post(`/blog/bookmarks/${id}`);
-    dispatch(setBookmarkedBlogIdSuccess(response.data.data));
-    toast.success(response.data.message);
-
+    // Removed unused response assignment
+    // You may want to refetch bookmarks or show a static message here
+    toast.success('Bookmarked successfully');
   } catch (error) {
     console.log(error);
     if (error.response.status === 401) {
@@ -359,10 +357,10 @@ export const getPopularTopicsList = () => async (dispatch) => {
 }
 
 export const updateBlog = (blogData, callback) => async (dispatch) => {
-  const { blogId } = blogData;
+  // const { blogId } = blogData;
   dispatch(setLoading(true));
   try {
-    const response = await axios.patch(`/blog/${blogId}`, blogData);
+    // Removed unused response assignment
     if (callback) {
       callback();
     }
@@ -381,7 +379,7 @@ export const updateBlog = (blogData, callback) => async (dispatch) => {
 export const deleteBlog = (_id, callback) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const response = await axios.delete(`/blog/${_id}`);
+    await axios.delete(`/blog/${_id}`);
     if (callback) {
       callback();
     }

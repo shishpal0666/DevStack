@@ -64,9 +64,13 @@ const Navbar = () => {
       }
       <div className='sticky top-0 z-10 bg-white w-full h-auto px-8 py-1 border-b-[1px] border-solid border-[#f0eeee]'>
         <div className='flex items-center justify-between'>
-          <section className='m-1'>
-            <Link to={'/'}>
-              <div className='font-bold font-logo1 text-2xl'>DevStack</div>
+          <section className='m-0 p-0 flex items-center'>
+            <Link to={'/'} className='block'>
+              <img 
+                src={process.env.PUBLIC_URL + '/DevStack.png'} 
+                alt='DevStack Logo' 
+                className='h-12 w-auto object-contain sm:h-14 md:h-16 lg:h-20 max-w-[140px]' 
+              />
             </Link>
           </section>
           <section className='flex flex-row items-center justify-between m-1 text-lg w-auto'>

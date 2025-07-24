@@ -4,7 +4,6 @@ import { BiSolidLike } from 'react-icons/bi';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import Img from '../../assets/contact_app.png';
 import { removeTags } from '../../helpers/removeTags';
 import { BookmarkBlog, likeBlog } from '../../redux/slices/blogsSlice';
 import { toast } from "react-toastify";
@@ -16,14 +15,14 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
   const plainContent = removeTags(content);
 
   const { email, _id: userId } = useSelector((store) => store.auth.userData);
-  const { bookmarkedBlogsId, bookmarkedBlogs } = useSelector((store) => store.blog);
+  const { bookmarkedBlogsId } = useSelector((store) => store.blog);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     setIsBookmarked((isBookmarked) => {
       return bookmarkedBlogsId.includes(_id)
     })
-  }, [bookmarkedBlogsId])
+  }, [bookmarkedBlogsId, _id])
 
   const handleBookmarkButton = () => {
     if (email) {
@@ -35,14 +34,17 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
   }
 
   // Like button handler
-  const isLiked = Array.isArray(likes) ? likes.includes(userId) : false;
+  const [localLikes, setLocalLikes] = useState(likes);
+  const isLiked = Array.isArray(localLikes) ? localLikes.includes(userId) : false;
   const handleLikeButton = () => {
     if (email) {
-      dispatch(likeBlog(_id)).then(() => {
-        if (typeof refreshBlogs === 'function') {
-          refreshBlogs();
-        }
-      });
+      // Optimistically update UI
+      if (isLiked) {
+        setLocalLikes((prev) => prev.filter((id) => id !== userId));
+      } else {
+        setLocalLikes((prev) => [...prev, userId]);
+      }
+      dispatch(likeBlog(_id));
     } else {
       toast.info('Please Login');
     }
@@ -87,7 +89,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
         <section className='flex items-center gap-4 mt-2 mb-2'>
           <button onClick={handleLikeButton} className={`flex items-center gap-1 ${isLiked ? 'text-black' : 'text-[#a19d9d]'} hover:text-black`}>
             <BiSolidLike className={`text-xl ${isLiked ? 'fill-black' : ''}`} />
-            <span className='text-sm'>{Array.isArray(likes) ? likes.length : likes}</span>
+            <span className='text-sm'>{Array.isArray(localLikes) ? localLikes.length : localLikes}</span>
           </button>
           <button onClick={handleCommentButton} className='flex items-center gap-1 text-[#a19d9d] hover:text-black'>
             <MdOutlineModeComment className='text-xl' />

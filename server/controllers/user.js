@@ -110,7 +110,11 @@ export const googleSignin = async (req, res) => {
   const { name, email, picture, sub, iss, email_verified } = result;
 
   if (email_verified) {
-    const existingUser = await User.findOne({ external_id: result.sub });
+    // Try to find user by external_id or by email (for users who signed up with email/password first)
+    let existingUser = await User.findOne({ external_id: result.sub });
+    if (!existingUser) {
+      existingUser = await User.findOne({ email });
+    }
     try {
       if (!existingUser) {
         const newUser = await User.create({
@@ -135,19 +139,28 @@ export const googleSignin = async (req, res) => {
           })
           .json({ result: newUser });
       } else {
+        // If user exists but doesn't have external_id, update it
+        if (!existingUser.external_id) {
+          existingUser.external_id = sub;
+          existingUser.external_type = iss;
+          existingUser.imgUrl = picture;
+          await existingUser.save();
+        }
         const token = jwt.sign(
           { id: existingUser._id },
           process.env.JWT_SECRET,
           { expiresIn: "7d" }
         );
 
-        res.status(200);
-        cookie("token", token, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "None",
-          expires: new Date(Date.now() + 30 * 24 * 3600000),
-        }).json({ result: existingUser });
+        res
+          .status(200)
+          .cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+            expires: new Date(Date.now() + 30 * 24 * 3600000),
+          })
+          .json({ result: existingUser });
       }
     } catch (error) {
       console.log(error);
