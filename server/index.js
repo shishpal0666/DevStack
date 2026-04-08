@@ -22,5 +22,11 @@ app.use('/blog', blogRoutes);
 app.use('/auth', userRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => app.listen(port, ()=> console.log(`Server is listening on port: ${port}`)))
+  .then(() => console.log('MongoDB connected'))
   .catch((error) => console.log(`${error} did not connect`));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, ()=> console.log(`Server is listening on port: ${port}`))
+}
+
+export default app;
