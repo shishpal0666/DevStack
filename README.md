@@ -55,10 +55,20 @@ DevStack is a full-stack blogging platform built with the MERN stack (MongoDB, E
 DevStack/
 ├── client/         # React frontend
 ├── server/         # Node.js/Express backend
+├── docs/           # Project documentation
 ├── README.md
 ├── LICENSE
 └── ...
 ```
+
+## Documentation
+
+Detailed project documentation is available in the [`docs/`](docs/) directory:
+
+| Document | Description |
+|----------|-------------|
+| [DevStack — Full Project Walkthrough](docs/DevStack%20—%20Full%20Project%20Walkthrough.md) | Comprehensive architecture overview, file tree, authentication flow, API endpoints, Redux state management, client-side routing, and deployment details. |
+| [Lighthouse Score Improvement Plan](docs/Lighthouse%20Score%20Improvement%20Plan.md) | Targeted optimizations to push all four Lighthouse categories (Performance, Accessibility, Best Practices, SEO) into the 90+ green zone — covering image optimization, font loading, CLS fixes, security headers, and more. |
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
