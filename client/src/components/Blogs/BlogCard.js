@@ -67,7 +67,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
               {
                 author?.imgUrl
                   ?
-                  <img src={author?.imgUrl} alt={author?.name.charAt(0)} width="32" height="32" className='w-8 h-8 rounded-full object-contain' />
+                  <img src={author?.imgUrl} alt={author?.name.charAt(0)} width="32" height="32" loading="lazy" className='w-8 h-8 rounded-full object-contain' />
                   :
                   <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
               }
