@@ -1,15 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import BlogCard from './BlogCard'
-import BlogListSkeleton from './BlogListSkeleton'
 import { MdKeyboardDoubleArrowDown } from 'react-icons/md';
+import LoadingComponent from '../LoadingComponent';
 
 const BlogsList = ({blogsData, callback, refreshBlogs}) => {
 
   const {blogsList, totalPages, currentPage} = blogsData;
 
   const { loading } = useSelector((store) => store.blog);
-
   const handleShowMoreButton = () => {
     if(totalPages > currentPage){
       callback();
@@ -19,6 +18,9 @@ const BlogsList = ({blogsData, callback, refreshBlogs}) => {
   return (
     <>
       <main className='mt-10 relative mb-10 mx-4 flex-auto md:min-w-[500px] md:max-w-[768px] flex flex-col items-start justify-start gap-6'>
+      {
+        loading && <LoadingComponent />    
+      }
       {
         blogsList.length > 0
         ?
@@ -43,12 +45,12 @@ const BlogsList = ({blogsData, callback, refreshBlogs}) => {
         }
         </>
         :
-        loading
-        ?
-        <BlogListSkeleton count={5} />
-        :
         <div className='w-full flex flex-col justify-start items-start text-base font-medium text-[#585858]'>
-          <span>No Blog</span>
+          {
+            !loading
+            &&
+            <span>No Blog</span>
+          }
         </div>
         
       }
