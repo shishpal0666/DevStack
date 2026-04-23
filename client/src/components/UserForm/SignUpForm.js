@@ -107,7 +107,7 @@ const SignUpForm = ({ handleSignInButton, gotoIndexPage }) => {
                 required
                 minLength={8}
               />
-              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword}>
+              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
                 {
                   showPassword
                     ?
@@ -128,7 +128,7 @@ const SignUpForm = ({ handleSignInButton, gotoIndexPage }) => {
                 required
                 minLength={8}
               />
-              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleToggleConfirmPassword}>
+              <button type='button' className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleToggleConfirmPassword} aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}>
                 {
                   showConfirmPassword
                     ?

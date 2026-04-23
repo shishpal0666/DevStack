@@ -67,6 +67,7 @@ const SearchBar = () => {
         className="pl-8 pr-2 py-2 bg-[#f7f5f5] outline-none rounded-full text-sm"
         type="text"
         placeholder="Search"
+        aria-label="Search blogs"
         onKeyDown={handleEnterKey}
         onChange={(e) => handleSearch(e)}
         value={searchValue}/>

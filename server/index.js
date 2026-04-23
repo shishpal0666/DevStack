@@ -18,6 +18,15 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.urlencoded({limit: '10mb', extended: true}));
 
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
+
 app.use('/blog', blogRoutes);
 app.use('/auth', userRoutes);
 

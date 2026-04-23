@@ -75,8 +75,8 @@ const BlogDetails = () => {
                         author?._id === userData?._id
                         &&
                         <>
-                          <HiPencil onClick={handleEditButton} className='cursor-pointer text-[#918e8e] hover:text-[#474444]' />
-                          <MdDelete onClick={handleDeleteButton} className='cursor-pointer text-[#918e8e] hover:text-[#474444]' />
+                          <HiPencil onClick={handleEditButton} className='cursor-pointer text-[#918e8e] hover:text-[#474444]' aria-label='Edit blog' role='button' />
+                          <MdDelete onClick={handleDeleteButton} className='cursor-pointer text-[#918e8e] hover:text-[#474444]' aria-label='Delete blog' role='button' />
                         </>
                       }
                     </div>
@@ -87,7 +87,7 @@ const BlogDetails = () => {
                         {
                           author?.imgUrl
                             ?
-                            <img src={author.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain' />
+                            <img src={author.imgUrl} alt={author?.name.charAt(0)} width="32" height="32" className='w-8 h-8 rounded-full object-contain' />
                             :
                             author?.name.charAt(0)
                             &&
@@ -102,7 +102,7 @@ const BlogDetails = () => {
                   <section className='w-full h-[1px] bg-[#f0eeee]'></section>
                   <section className='flex items-center justify-start gap-10 my-4 mx-4 '>
                     <section className='flex items-center justify-start gap-2'>
-                      <button onClick={handleLikeButton} className='p-1'>
+                      <button onClick={handleLikeButton} className='p-1' aria-label='Like this blog'>
                         <BiSolidLike className={`${isLiked ? ' fill-black' : 'text-[#a19d9d]'} text-xl`} />
                       </button>
                       <span className='text-sm'>{blogLikesNumber.length}</span>
@@ -129,12 +129,12 @@ const BlogDetails = () => {
                     {
                       tags?.map((tag) => {
                         return (
-                          <>
+                          <React.Fragment key={tag}>
                             {/* <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >  in case of passing tag as search query params*/}
                             <Link to={"/topic/" + tag}>
                               <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
                             </Link>
-                          </>
+                          </React.Fragment>
                         )
                       })
                     }

@@ -20,7 +20,7 @@ const CommentsList = () => {
                       {
                         imgUrl
                           ?
-                          <img src={imgUrl} alt={name?.charAt(0)} className='w-8 h-8 rounded-full object-contain' />
+                          <img src={imgUrl} alt={name?.charAt(0)} width="32" height="32" className='w-8 h-8 rounded-full object-contain' />
                           :
                           <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{name?.charAt(0)}</span>
                       }

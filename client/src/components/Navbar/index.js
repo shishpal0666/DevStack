@@ -67,8 +67,10 @@ const Navbar = () => {
           <section className='m-0 p-0 flex items-center'>
             <Link to={'/'} className='block'>
               <img 
-                src={process.env.PUBLIC_URL + '/DevStack.png'} 
+                src={process.env.PUBLIC_URL + '/DevStack_160.webp'} 
                 alt='DevStack Logo' 
+                width="80"
+                height="80"
                 className='h-12 w-auto object-contain sm:h-14 md:h-16 lg:h-20 max-w-[140px]' 
                 onClick={() => window.location.replace('/')} 
                 style={{ cursor: 'pointer' }}
@@ -95,12 +97,12 @@ const Navbar = () => {
                   <NavbarProfileDroddown closeProfileDropdown={closeProfileDropdown} />
                 </div>
                 }
-                <button className='flex items-center justify-normal border-none' onClick={handleToggleProfileDropdown}> 
+                <button className='flex items-center justify-normal border-none' onClick={handleToggleProfileDropdown} aria-label='Toggle profile menu'> 
                   <div className='flex items-center justify-center'>
                     {
                       imgUrl
                       ?
-                      <img src={imgUrl} alt={name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
+                      <img src={imgUrl} alt={name.charAt(0)} width="32" height="32" className='w-8 h-8 rounded-full object-contain'/>
                       : 
                       <span className='bg-[#1A8917] hover:bg-[#105a0f] w-9 h-9 flex items-center justify-center rounded-full text-white font-medium text-base'>{name.charAt(0)}</span>
                     }

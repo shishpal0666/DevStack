@@ -57,7 +57,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
 
   return (
     <article className='relative w-full'>
-      <button onClick={handleBookmarkButton} className='group p-1 absolute bottom-0 right-0'>
+      <button onClick={handleBookmarkButton} className='group p-1 absolute bottom-0 right-0' aria-label='Bookmark this blog'>
         <BiSolidBookmark className={`${isBookmarked ? 'text-[#1A8917] stroke-none' : 'text-white'} stroke-1 w-5 h-5 stroke-[#585858]`} />
       </button>
       <div className='flex flex-col items-start justify-start gap-4'>
@@ -67,7 +67,7 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
               {
                 author?.imgUrl
                   ?
-                  <img src={author?.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain' />
+                  <img src={author?.imgUrl} alt={author?.name.charAt(0)} width="32" height="32" className='w-8 h-8 rounded-full object-contain' />
                   :
                   <span className='bg-[#1A8917] hover:bg-[#105a0f] w-8 h-8 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
               }
@@ -87,11 +87,11 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags = null, likes =
         </Link>
         {/* Like and Comment counts */}
         <section className='flex items-center gap-4 mt-2 mb-2'>
-          <button onClick={handleLikeButton} className={`flex items-center gap-1 ${isLiked ? 'text-black' : 'text-[#a19d9d]'} hover:text-black`}>
+          <button onClick={handleLikeButton} className={`flex items-center gap-1 ${isLiked ? 'text-black' : 'text-[#a19d9d]'} hover:text-black`} aria-label='Like this blog'>
             <BiSolidLike className={`text-xl ${isLiked ? 'fill-black' : ''}`} />
             <span className='text-sm'>{Array.isArray(localLikes) ? localLikes.length : localLikes}</span>
           </button>
-          <button onClick={handleCommentButton} className='flex items-center gap-1 text-[#a19d9d] hover:text-black'>
+          <button onClick={handleCommentButton} className='flex items-center gap-1 text-[#a19d9d] hover:text-black' aria-label='View comments'>
             <MdOutlineModeComment className='text-xl' />
             <span className='text-sm'>{Array.isArray(comments) ? comments.length : comments}</span>
           </button>

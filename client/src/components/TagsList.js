@@ -8,7 +8,7 @@ const TagsList = () => {
   const { mostPopularTopics } = useSelector((store) => store.blog);
  
   return (
-    <div className='pt-10 md:min-w-[240px] md:max-w-[368px] md:block hidden border-l-[1px] border-[#f0eeee] relative'>
+    <div className='pt-10 md:min-w-[240px] md:max-w-[368px] md:block hidden border-l-[1px] border-[#f0eeee] relative min-h-[300px]'>
       <div className='sticky top-10 pl-10 flex flex-col items-start justify-start gap-6'>
         <h1 className='text-base font-medium'>Popular Topics</h1>
         <section className='flex items-center justify-start flex-wrap gap-y-5 gap-x-3 w-[90%] h-auto mt-2 mb-2'>

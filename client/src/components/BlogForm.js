@@ -100,14 +100,14 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
             {
               tagList?.map((tag) => {
                 return(
-                  <>
+                  <React.Fragment key={tag}>
                     <span className='flex flex-row items-center px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
                     {tag}
                     <button onClick={() => {handleRemoveTagButton(tag)}} className='p-0 text-base ml-1'>
                       <GrFormClose />
                     </button>
                     </span>
-                  </>
+                  </React.Fragment>
                 )
               })
             }
